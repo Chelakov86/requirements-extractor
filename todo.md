@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 38/134 tasks complete
+## Progress: 52/134 tasks complete
 
 ---
 
@@ -61,31 +61,31 @@
 
 ---
 
-## Prompt 3 — JWT Authentication
+## Prompt 3 — JWT Authentication ✅
 
-- [ ] Write `backend/app/auth/utils.py`
-  - [ ] `hash_password(plain) -> str` (bcrypt, rounds=12)
-  - [ ] `verify_password(plain, hashed) -> bool`
-  - [ ] `create_access_token(user_id) -> str` (JWT HS256, exp = now + JWT_EXPIRE_HOURS)
-  - [ ] `decode_access_token(token) -> dict` (raises HTTPException 401 on invalid/expired)
-- [ ] Write `backend/app/auth/dependencies.py`
-  - [ ] `get_current_user` dependency (decode JWT, load User from DB, 401 if not found)
-- [ ] Write `backend/app/api/auth.py`
-  - [ ] `POST /auth/login` — accepts OAuth2PasswordRequestForm
-  - [ ] Lookup user by email, verify password
-  - [ ] Success: return `access_token`, `token_type`, `expires_in`
-  - [ ] Failure: `HTTPException(401)` with `INVALID_CREDENTIALS` error code
-- [ ] Update `backend/app/api/__init__.py` — create main APIRouter, include auth router at `/auth`
-- [ ] Wire main APIRouter into `backend/app/main.py` at `/api/v1`
-- [ ] Write `backend/scripts/create_user.py`
-  - [ ] Accept `--email` and `--password` CLI args
-  - [ ] Hash password, insert user, handle duplicate email
-- [ ] Write `backend/tests/test_auth.py`
-  - [ ] `test_login_success` → 200, access_token present
-  - [ ] `test_login_wrong_password` → 401, `INVALID_CREDENTIALS`
-  - [ ] `test_login_unknown_email` → 401
-  - [ ] `test_protected_endpoint_without_token` → 401
-  - [ ] `test_protected_endpoint_with_token` → 200
+- [x] Write `backend/app/auth/utils.py`
+  - [x] `hash_password(plain) -> str` (bcrypt, rounds=12)
+  - [x] `verify_password(plain, hashed) -> bool`
+  - [x] `create_access_token(user_id) -> str` (JWT HS256, exp = now + JWT_EXPIRE_HOURS)
+  - [x] `decode_access_token(token) -> dict` (raises HTTPException 401 on invalid/expired)
+- [x] Write `backend/app/auth/dependencies.py`
+  - [x] `get_current_user` dependency (decode JWT, load User from DB, 401 if not found)
+- [x] Write `backend/app/api/auth.py`
+  - [x] `POST /auth/login` — accepts OAuth2PasswordRequestForm
+  - [x] Lookup user by email, verify password
+  - [x] Success: return `access_token`, `token_type`, `expires_in`
+  - [x] Failure: `HTTPException(401)` with `INVALID_CREDENTIALS` error code
+- [x] Update `backend/app/api/__init__.py` — create main APIRouter, include auth router at `/auth`
+- [x] Wire main APIRouter into `backend/app/main.py` at `/api/v1`
+- [x] Write `backend/scripts/create_user.py`
+  - [x] Accept `--email` and `--password` CLI args
+  - [x] Hash password, insert user, handle duplicate email
+- [x] Write `backend/tests/test_auth.py`
+  - [x] `test_login_success` → 200, access_token present
+  - [x] `test_login_wrong_password` → 401, `INVALID_CREDENTIALS`
+  - [x] `test_login_unknown_email` → 401
+  - [x] `test_protected_endpoint_without_token` → 401
+  - [x] `test_protected_endpoint_with_token` → 200
 
 ---
 
