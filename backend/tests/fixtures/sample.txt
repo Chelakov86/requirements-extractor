@@ -1,0 +1,6 @@
+This is a sample plain text document used for testing the file parser service.
+It contains more than one hundred characters of content so that it passes the minimum character validation check.
+Requirements:
+- The system shall parse PDF files.
+- The system shall parse DOCX files.
+- The system shall handle UTF-8 encoded text.

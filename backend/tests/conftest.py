@@ -16,7 +16,7 @@ engine = create_engine(TEST_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def create_test_db() -> None:
     """Create the test database if it doesn't already exist."""
     admin_engine = create_engine(f"{_url_base}/postgres", isolation_level="AUTOCOMMIT")

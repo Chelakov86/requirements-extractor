@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 65/134 tasks complete
+## Progress: 79/134 tasks complete
 
 ---
 
@@ -113,33 +113,33 @@
 
 ---
 
-## Prompt 5 — File Parsing Service
+## Prompt 5 — File Parsing Service ✅
 
-- [ ] Write `backend/app/services/file_parser.py`
-  - [ ] `ParsedDocument` dataclass (filename, file_type, raw_text, char_count)
-  - [ ] `FileParser` class with `SUPPORTED_EXTENSIONS` and `SUPPORTED_MIME_TYPES` constants
-  - [ ] `validate_file(filename, content_type, size_bytes)` — raises HTTPException with structured error codes
-    - [ ] `INVALID_FILE_TYPE` for unsupported extension or mismatched MIME
-    - [ ] `FILE_TOO_LARGE` for > MAX_FILE_SIZE_MB
-  - [ ] `parse(filename, content, content_type) -> ParsedDocument` — dispatches to correct parser
-  - [ ] `_parse_pdf(content) -> str` — PyMuPDF, all pages joined with newlines
-  - [ ] `_parse_docx(content) -> str` — python-docx, paragraph texts
-  - [ ] `_parse_xlsx(content) -> str` — openpyxl, all sheets/rows/cells
-  - [ ] `_parse_pptx(content) -> str` — python-pptx, all slides/shapes
-  - [ ] `_parse_text(content) -> str` — UTF-8 decode, fallback latin-1
-  - [ ] After parsing: raise `NO_TEXT_EXTRACTED` (422) if text < 50 chars
-  - [ ] `validate_total_size(files, settings)` — raises `TOTAL_SIZE_EXCEEDED` (400) if sum > MAX_TOTAL_SIZE_MB
-- [ ] Create `backend/tests/fixtures/sample.txt` and `sample.md`
-- [ ] Write `backend/tests/test_file_parser.py`
-  - [ ] `test_parse_txt`
-  - [ ] `test_parse_md`
-  - [ ] `test_parse_docx` (create minimal docx in-memory)
-  - [ ] `test_parse_xlsx` (create minimal xlsx in-memory, 3 rows)
-  - [ ] `test_parse_pptx` (create minimal pptx with text shape)
-  - [ ] `test_validate_unsupported_extension` → `INVALID_FILE_TYPE`
-  - [ ] `test_validate_file_too_large` (31 MB) → `FILE_TOO_LARGE`
-  - [ ] `test_validate_total_size_exceeded` (two files = 51 MB) → `TOTAL_SIZE_EXCEEDED`
-  - [ ] `test_empty_document_raises` (whitespace-only file) → `NO_TEXT_EXTRACTED`
+- [x] Write `backend/app/services/file_parser.py`
+  - [x] `ParsedDocument` dataclass (filename, file_type, raw_text, char_count)
+  - [x] `FileParser` class with `SUPPORTED_EXTENSIONS` and `SUPPORTED_MIME_TYPES` constants
+  - [x] `validate_file(filename, content_type, size_bytes)` — raises HTTPException with structured error codes
+    - [x] `INVALID_FILE_TYPE` for unsupported extension or mismatched MIME
+    - [x] `FILE_TOO_LARGE` for > MAX_FILE_SIZE_MB
+  - [x] `parse(filename, content, content_type) -> ParsedDocument` — dispatches to correct parser
+  - [x] `_parse_pdf(content) -> str` — PyMuPDF, all pages joined with newlines
+  - [x] `_parse_docx(content) -> str` — python-docx, paragraph texts
+  - [x] `_parse_xlsx(content) -> str` — openpyxl, all sheets/rows/cells
+  - [x] `_parse_pptx(content) -> str` — python-pptx, all slides/shapes
+  - [x] `_parse_text(content) -> str` — UTF-8 decode, fallback latin-1
+  - [x] After parsing: raise `NO_TEXT_EXTRACTED` (422) if text < 50 chars
+  - [x] `validate_total_size(files, settings)` — raises `TOTAL_SIZE_EXCEEDED` (400) if sum > MAX_TOTAL_SIZE_MB
+- [x] Create `backend/tests/fixtures/sample.txt` and `sample.md`
+- [x] Write `backend/tests/test_file_parser.py`
+  - [x] `test_parse_txt`
+  - [x] `test_parse_md`
+  - [x] `test_parse_docx` (create minimal docx in-memory)
+  - [x] `test_parse_xlsx` (create minimal xlsx in-memory, 3 rows)
+  - [x] `test_parse_pptx` (create minimal pptx with text shape)
+  - [x] `test_validate_unsupported_extension` → `INVALID_FILE_TYPE`
+  - [x] `test_validate_file_too_large` (31 MB) → `FILE_TOO_LARGE`
+  - [x] `test_validate_total_size_exceeded` (two files = 51 MB) → `TOTAL_SIZE_EXCEEDED`
+  - [x] `test_empty_document_raises` (whitespace-only file) → `NO_TEXT_EXTRACTED`
 
 ---
 
