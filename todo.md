@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 18/134 tasks complete
+## Progress: 38/134 tasks complete
 
 ---
 
@@ -36,28 +36,28 @@
 
 ---
 
-## Prompt 2 — Database Models & Alembic Migration
+## Prompt 2 — Database Models & Alembic Migration ✅
 
-- [ ] Write `backend/app/models.py` — SQLAlchemy 2.x `DeclarativeBase`
-  - [ ] `User` model (id UUID PK, email unique, password_hash, created_at)
-  - [ ] `Project` model (id, user_id FK→users cascade, name, description, created_at, updated_at)
-  - [ ] `ExtractionSession` model (id, project_id FK, title, output_language default='de', status default='pending', error_message, created_at)
-  - [ ] `SourceDocument` model (id, session_id FK, filename, file_type, raw_text, created_at)
-  - [ ] `UserStory` model (id, session_id FK, title, as_who, i_want, so_that, acceptance_criteria ARRAY, priority default='medium', labels ARRAY, source_snippet, is_deleted default=False, sort_order, created_at, updated_at)
-  - [ ] `NonFunctionalRequirement` model (id, session_id FK, title, category, description, metric, priority, source_snippet, is_deleted, sort_order, timestamps)
-  - [ ] `OpenQuestion` model (id, session_id FK, question_text, owner, status default='open', source_snippet, is_deleted, sort_order, timestamps)
-- [ ] Write `backend/app/database.py`
-  - [ ] SQLAlchemy engine from `DATABASE_URL`
-  - [ ] `SessionLocal` factory
-  - [ ] `get_db` dependency (yields session)
-- [ ] Configure `backend/alembic/env.py` to import `Base` and use `DATABASE_URL`
-- [ ] Generate `backend/alembic/versions/001_initial_schema.py`
-  - [ ] `upgrade()` creates all 7 tables in dependency order
-  - [ ] `downgrade()` drops them in reverse order
-- [ ] Write `backend/tests/conftest.py`
-  - [ ] `db_session` fixture (create tables before test, drop after)
-  - [ ] `client` fixture (TestClient with injected test DB)
-- [ ] Verify: `alembic upgrade head` creates all 7 tables
+- [x] Write `backend/app/models.py` — SQLAlchemy 2.x `DeclarativeBase`
+  - [x] `User` model (id UUID PK, email unique, password_hash, created_at)
+  - [x] `Project` model (id, user_id FK→users cascade, name, description, created_at, updated_at)
+  - [x] `ExtractionSession` model (id, project_id FK, title, output_language default='de', status default='pending', error_message, created_at)
+  - [x] `SourceDocument` model (id, session_id FK, filename, file_type, raw_text, created_at)
+  - [x] `UserStory` model (id, session_id FK, title, as_who, i_want, so_that, acceptance_criteria ARRAY, priority default='medium', labels ARRAY, source_snippet, is_deleted default=False, sort_order, created_at, updated_at)
+  - [x] `NonFunctionalRequirement` model (id, session_id FK, title, category, description, metric, priority, source_snippet, is_deleted, sort_order, timestamps)
+  - [x] `OpenQuestion` model (id, session_id FK, question_text, owner, status default='open', source_snippet, is_deleted, sort_order, timestamps)
+- [x] Write `backend/app/database.py`
+  - [x] SQLAlchemy engine from `DATABASE_URL`
+  - [x] `SessionLocal` factory
+  - [x] `get_db` dependency (yields session)
+- [x] Configure `backend/alembic/env.py` to import `Base` and use `DATABASE_URL`
+- [x] Generate `backend/alembic/versions/001_initial_schema.py`
+  - [x] `upgrade()` creates all 7 tables in dependency order
+  - [x] `downgrade()` drops them in reverse order
+- [x] Write `backend/tests/conftest.py`
+  - [x] `db_session` fixture (create tables before test, drop after)
+  - [x] `client` fixture (TestClient with injected test DB)
+- [x] Verify: `alembic upgrade head` creates all 7 tables
 
 ---
 

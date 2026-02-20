@@ -16,10 +16,9 @@ database_url = os.environ.get("DATABASE_URL")
 if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
 
-# Import metadata here once models exist:
-# from app.models import Base
-# target_metadata = Base.metadata
-target_metadata = None
+from app.models import Base
+
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
