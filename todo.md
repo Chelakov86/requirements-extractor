@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 52/134 tasks complete
+## Progress: 65/134 tasks complete
 
 ---
 
@@ -89,27 +89,27 @@
 
 ---
 
-## Prompt 4 — Project CRUD API
+## Prompt 4 — Project CRUD API ✅
 
-- [ ] Write `backend/app/schemas/project.py`
-  - [ ] `ProjectCreate` schema (name required, description optional)
-  - [ ] `ProjectResponse` schema (with `session_count` computed field)
-- [ ] Write `backend/app/api/projects.py`
-  - [ ] `GET /projects` — list user's projects with session_count, sorted by created_at DESC
-  - [ ] `POST /projects` — create project, return 201
-  - [ ] `GET /projects/{project_id}` — single project, 404 if not found/not owned
-  - [ ] `DELETE /projects/{project_id}` — hard delete, return 204
-- [ ] Wire projects router into main APIRouter at `/projects`
-- [ ] Write `backend/tests/test_projects.py`
-  - [ ] Add `auth_headers(client)` helper
-  - [ ] `test_list_projects_empty` → 200, empty list
-  - [ ] `test_create_project` → 201, id and name present
-  - [ ] `test_create_project_missing_name` → 422
-  - [ ] `test_list_projects_returns_created` → 2 projects returned
-  - [ ] `test_get_project_by_id` → 200
-  - [ ] `test_get_project_not_found` → 404
-  - [ ] `test_delete_project` → 204, then GET returns 404
-  - [ ] `test_user_isolation` — user B cannot see user A's project
+- [x] Write `backend/app/schemas/project.py`
+  - [x] `ProjectCreate` schema (name required, description optional)
+  - [x] `ProjectResponse` schema (with `session_count` computed field)
+- [x] Write `backend/app/api/projects.py`
+  - [x] `GET /projects` — list user's projects with session_count, sorted by created_at DESC
+  - [x] `POST /projects` — create project, return 201
+  - [x] `GET /projects/{project_id}` — single project, 404 if not found/not owned
+  - [x] `DELETE /projects/{project_id}` — hard delete, return 204
+- [x] Wire projects router into main APIRouter at `/projects`
+- [x] Write `backend/tests/test_projects.py`
+  - [x] Add `auth_headers(client)` helper
+  - [x] `test_list_projects_empty` → 200, empty list
+  - [x] `test_create_project` → 201, id and name present
+  - [x] `test_create_project_missing_name` → 422
+  - [x] `test_list_projects_returns_created` → 2 projects returned
+  - [x] `test_get_project_by_id` → 200
+  - [x] `test_get_project_not_found` → 404
+  - [x] `test_delete_project` → 204, then GET returns 404
+  - [x] `test_user_isolation` — user B cannot see user A's project
 
 ---
 
