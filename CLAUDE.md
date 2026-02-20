@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 10-chunk implementation plan.
 
-**Status**: Specification complete, no source code implemented yet. `todo.md` tracks 134 implementation tasks.
+**Status**: Prompts 1 & 2 complete (38/134 tasks). Scaffold, Docker Compose, DB models, Alembic migration, and test fixtures are implemented. `todo.md` tracks remaining tasks.
 
 ## Tech Stack
 
@@ -64,9 +64,10 @@ docker compose exec backend python -m scripts.create_user
 
 ```
 app/
-  main.py           # FastAPI app, router registration
-  settings.py       # pydantic-settings (DATABASE_URL, SECRET_KEY, GEMINI_API_KEY)
-  models.py         # SQLAlchemy models (User, Project, ExtractionSession, SourceDocument, UserStory, NFR, OpenQuestion)
+  main.py           # FastAPI app, router registration  ✅
+  config.py         # pydantic-settings (DATABASE_URL, SECRET_KEY, GEMINI_API_KEY)  ✅
+  database.py       # SQLAlchemy engine + get_db() dependency  ✅
+  models.py         # SQLAlchemy models (User, Project, ExtractionSession, SourceDocument, UserStory, NFR, OpenQuestion)  ✅
   routers/          # auth.py, projects.py, sessions.py, items.py, export.py
   services/
     file_parser.py  # dispatch by MIME type → format-specific parsers
@@ -74,8 +75,10 @@ app/
     extraction.py   # orchestrates parse → prompt → Gemini → persist
     export.py
   deps.py           # get_current_user dependency
-alembic/            # migrations
+alembic/
+  versions/001_initial_schema.py   # ✅
 tests/
+  conftest.py       # test DB setup + client/db_session fixtures  ✅
 scripts/create_user.py
 ```
 
@@ -96,10 +99,10 @@ All entities use UUID PKs and have `created_at`/`updated_at` timestamps. UserSto
 
 ```
 User → Project → ExtractionSession
-                      ├── SourceDocument (raw_text extracted from uploaded files)
-                      ├── UserStory (as_who, i_want, so_that, acceptance_criteria[], priority, labels[])
-                      ├── NonFunctionalRequirement (category, metric, priority)
-                      └── OpenQuestion (question_text, owner, status)
+                      ├── SourceDocument (filename, file_type, raw_text)
+                      ├── UserStory (title, as_who, i_want, so_that, acceptance_criteria[], priority, labels[], source_snippet, is_deleted, sort_order)
+                      ├── NonFunctionalRequirement (title, category, description, metric, priority, source_snippet, is_deleted, sort_order)
+                      └── OpenQuestion (question_text, owner, status, source_snippet, is_deleted, sort_order)
 ```
 
 NFR categories: `Performance | Security | Usability | Reliability | Maintainability | Compliance`
