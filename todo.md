@@ -1,38 +1,38 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 0/134 tasks complete
+## Progress: 18/134 tasks complete
 
 ---
 
-## Prompt 1 — Project Scaffold & Docker Compose
+## Prompt 1 — Project Scaffold & Docker Compose ✅
 
-- [ ] Create root folder structure (`backend/`, `frontend/`, docker files)
-  - [ ] Create `backend/app/__init__.py`
-  - [ ] Create `backend/app/api/__init__.py`
-  - [ ] Create `backend/tests/__init__.py`
-  - [ ] Create `backend/alembic/` directory
-  - [ ] Create `frontend/src/` directory
-- [ ] Write `docker-compose.yml`
-  - [ ] `db` service: postgres:16-alpine, port 5432, named volume
-  - [ ] `backend` service: build ./backend, port 8000, depends_on db, env vars
-  - [ ] `frontend` service: build ./frontend, port 3000, depends_on backend
-- [ ] Write `.env.example` with `DATABASE_URL`, `SECRET_KEY`, `GEMINI_API_KEY` placeholders
-- [ ] Write `backend/app/config.py` (pydantic-settings v2)
-  - [ ] Fields: `DATABASE_URL`, `SECRET_KEY`, `GEMINI_API_KEY`, `JWT_ALGORITHM`, `JWT_EXPIRE_HOURS`, `MAX_FILE_SIZE_MB`, `MAX_TOTAL_SIZE_MB`
-- [ ] Write `backend/app/main.py`
-  - [ ] FastAPI app with title "Requirements Extractor API"
-  - [ ] CORS middleware allowing `http://localhost:3000`
-  - [ ] Mount router at `/api/v1`
-  - [ ] `GET /health` → `{"status": "ok"}`
-- [ ] Write `backend/Dockerfile` (python:3.12-slim, uvicorn entrypoint)
-- [ ] Write `backend/pyproject.toml` with all dependencies
-  - [ ] Runtime: fastapi, uvicorn[standard], sqlalchemy, alembic, psycopg2-binary, pydantic-settings
-  - [ ] Runtime: python-jose[cryptography], passlib[bcrypt]
-  - [ ] Runtime: google-generativeai
-  - [ ] Runtime: PyMuPDF, python-docx, openpyxl, python-pptx, python-multipart
-  - [ ] Dev: pytest, pytest-asyncio, httpx
-- [ ] Write `frontend/Dockerfile` (node:20-alpine, nginx for production build)
-- [ ] Verify: `docker compose up --build` starts all 3 services, `GET /health` returns 200
+- [x] Create root folder structure (`backend/`, `frontend/`, docker files)
+  - [x] Create `backend/app/__init__.py`
+  - [x] Create `backend/app/api/__init__.py`
+  - [x] Create `backend/tests/__init__.py`
+  - [x] Create `backend/alembic/` directory
+  - [x] Create `frontend/src/` directory
+- [x] Write `docker-compose.yml`
+  - [x] `db` service: postgres:16-alpine, port 5432, named volume
+  - [x] `backend` service: build ./backend, port 8000, depends_on db, env vars
+  - [x] `frontend` service: build ./frontend, port 3000, depends_on backend
+- [x] Write `.env.example` with `DATABASE_URL`, `SECRET_KEY`, `GEMINI_API_KEY` placeholders
+- [x] Write `backend/app/config.py` (pydantic-settings v2)
+  - [x] Fields: `DATABASE_URL`, `SECRET_KEY`, `GEMINI_API_KEY`, `JWT_ALGORITHM`, `JWT_EXPIRE_HOURS`, `MAX_FILE_SIZE_MB`, `MAX_TOTAL_SIZE_MB`
+- [x] Write `backend/app/main.py`
+  - [x] FastAPI app with title "Requirements Extractor API"
+  - [x] CORS middleware allowing `http://localhost:3000`
+  - [x] Mount router at `/api/v1`
+  - [x] `GET /health` → `{"status": "ok"}`
+- [x] Write `backend/Dockerfile` (python:3.12-slim, uvicorn entrypoint)
+- [x] Write `backend/pyproject.toml` with all dependencies
+  - [x] Runtime: fastapi, uvicorn[standard], sqlalchemy, alembic, psycopg2-binary, pydantic-settings
+  - [x] Runtime: python-jose[cryptography], passlib[bcrypt]
+  - [x] Runtime: google-generativeai
+  - [x] Runtime: PyMuPDF, python-docx, openpyxl, python-pptx, python-multipart
+  - [x] Dev: pytest, pytest-asyncio, httpx
+- [x] Write `frontend/Dockerfile` (node:20-alpine, nginx for production build)
+- [x] Verify: `docker compose up --build` starts all 3 services, `GET /health` returns 200
 
 ---
 
