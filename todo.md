@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 79/134 tasks complete
+## Progress: 108/134 tasks complete
 
 ---
 
@@ -143,38 +143,38 @@
 
 ---
 
-## Prompt 6 — Extraction Session Creation & Polling
+## Prompt 6 — Extraction Session Creation & Polling ✅
 
-- [ ] Write `backend/app/schemas/session.py`
-  - [ ] `SessionCreateResponse` (session_id, status)
-  - [ ] `SessionStatusResponse` (status, progress_message, error_message)
-  - [ ] `UserStoryResponse`
-  - [ ] `NFRResponse`
-  - [ ] `OpenQuestionResponse`
-  - [ ] `SessionDetailResponse` (with nested item lists)
-- [ ] Write `backend/app/api/sessions.py`
-  - [ ] `POST /projects/{project_id}/sessions` (multipart/form-data)
-    - [ ] Validate project exists and belongs to current user → 404
-    - [ ] Require at least text_input or files → 422
-    - [ ] Validate each file (FileParser.validate_file)
-    - [ ] Validate total size (validate_total_size)
-    - [ ] Create ExtractionSession with status='pending'
-    - [ ] Create SourceDocument for text_input if provided
-    - [ ] Call background_tasks.add_task(run_extraction, ...)
-    - [ ] Return 202 with session_id
-  - [ ] `GET /sessions/{session_id}` — full session with non-deleted items, sorted
-  - [ ] `GET /sessions/{session_id}/status` — status + progress_message
-  - [ ] `GET /projects/{project_id}/sessions` — session summaries with item counts (`SessionSummaryResponse`)
-- [ ] Wire session routers into main APIRouter
-- [ ] Write stub `backend/app/services/extraction_service.py`
-  - [ ] `run_extraction(...)` — creates own DB session, sets status=processing, sleeps 1s, sets status=completed
-- [ ] Write `backend/tests/test_sessions.py`
-  - [ ] `test_create_session_text_only` → 202, session_id returned
-  - [ ] `test_create_session_status_polling` → returns status
-  - [ ] `test_create_session_wrong_project` → 404
-  - [ ] `test_create_session_no_input` → 422
-  - [ ] `test_get_session_returns_empty_items` → lists are empty (stub)
-  - [ ] `test_session_not_accessible_by_other_user` → 404
+- [x] Write `backend/app/schemas/session.py`
+  - [x] `SessionCreateResponse` (session_id, status)
+  - [x] `SessionStatusResponse` (status, progress_message, error_message)
+  - [x] `UserStoryResponse`
+  - [x] `NFRResponse`
+  - [x] `OpenQuestionResponse`
+  - [x] `SessionDetailResponse` (with nested item lists)
+- [x] Write `backend/app/api/sessions.py`
+  - [x] `POST /projects/{project_id}/sessions` (multipart/form-data)
+    - [x] Validate project exists and belongs to current user → 404
+    - [x] Require at least text_input or files → 422
+    - [x] Validate each file (FileParser.validate_file)
+    - [x] Validate total size (validate_total_size)
+    - [x] Create ExtractionSession with status='pending'
+    - [x] Create SourceDocument for text_input if provided
+    - [x] Call background_tasks.add_task(run_extraction, ...)
+    - [x] Return 202 with session_id
+  - [x] `GET /sessions/{session_id}` — full session with non-deleted items, sorted
+  - [x] `GET /sessions/{session_id}/status` — status + progress_message
+  - [x] `GET /projects/{project_id}/sessions` — session summaries with item counts (`SessionSummaryResponse`)
+- [x] Wire session routers into main APIRouter
+- [x] Write stub `backend/app/services/extraction_service.py`
+  - [x] `run_extraction(...)` — creates own DB session, sets status=processing, sleeps 1s, sets status=completed
+- [x] Write `backend/tests/test_sessions.py`
+  - [x] `test_create_session_text_only` → 202, session_id returned
+  - [x] `test_create_session_status_polling` → returns status
+  - [x] `test_create_session_wrong_project` → 404
+  - [x] `test_create_session_no_input` → 422
+  - [x] `test_get_session_returns_empty_items` → lists are empty (stub)
+  - [x] `test_session_not_accessible_by_other_user` → 404
 
 ---
 
