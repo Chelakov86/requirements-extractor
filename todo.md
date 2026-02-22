@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 108/134 tasks complete
+## Progress: 122/134 tasks complete
 
 ---
 
@@ -28,7 +28,7 @@
 - [x] Write `backend/pyproject.toml` with all dependencies
   - [x] Runtime: fastapi, uvicorn[standard], sqlalchemy, alembic, psycopg2-binary, pydantic-settings
   - [x] Runtime: python-jose[cryptography], passlib[bcrypt]
-  - [x] Runtime: google-generativeai
+  - [x] Runtime: google-genai (migrated from deprecated google-generativeai)
   - [x] Runtime: PyMuPDF, python-docx, openpyxl, python-pptx, python-multipart
   - [x] Dev: pytest, pytest-asyncio, httpx
 - [x] Write `frontend/Dockerfile` (node:20-alpine, nginx for production build)
@@ -178,43 +178,43 @@
 
 ---
 
-## Prompt 7 — Gemini Integration & Extraction Engine
+## Prompt 7 — Gemini Integration & Extraction Engine ✅
 
-- [ ] Write `backend/app/services/gemini_client.py`
-  - [ ] `GeminiClient.__init__` — configure genai, create model instance
-  - [ ] `GeminiClient.extract_requirements(text, output_language) -> dict` — calls Gemini, returns parsed dict; raises `ExtractionError` on API failure
-- [ ] Write `backend/app/services/prompt_builder.py`
-  - [ ] `build_extraction_prompt(text, output_language) -> str`
-  - [ ] German output: "Als...", "möchte ich...", "damit..."
-  - [ ] English output: "As a...", "I want to...", "so that..."
-  - [ ] Specifies exact JSON output structure (no markdown fences)
-  - [ ] Limits source_snippet to 500 chars
-  - [ ] Constrains category values and priority values
-- [ ] Write `backend/app/services/response_parser.py`
-  - [ ] `parse_gemini_response(response_text) -> dict`
-    - [ ] Strip accidental markdown fences
-    - [ ] Parse JSON
-    - [ ] Validate 3 required keys present
-    - [ ] Raise `ResponseParseError` on failure
-  - [ ] `map_to_db_models(parsed, session_id) -> dict` — converts to SQLAlchemy model instances
-- [ ] Replace stub in `backend/app/services/extraction_service.py` with full implementation
-  - [ ] Creates own DB session (not request context)
-  - [ ] Sets status='processing'
-  - [ ] Parses all files (catches per-file errors, collects warnings)
-  - [ ] Handles text_input as SourceDocument
-  - [ ] Persists SourceDocuments
-  - [ ] Builds combined text (truncated to 150,000 chars)
-  - [ ] Calls GeminiClient.extract_requirements
-  - [ ] Persists UserStory, NFR, OpenQuestion rows with sort_order
-  - [ ] Sets status='completed' (or 'failed' on exception)
-  - [ ] Stores warnings in session.error_message if partial failures
-- [ ] Write `backend/tests/test_extraction.py`
-  - [ ] `test_prompt_builder_german` — output contains German story format
-  - [ ] `test_prompt_builder_english` — output contains English story format
-  - [ ] `test_response_parser_valid` — valid JSON → parsed dict with 3 keys
-  - [ ] `test_response_parser_strips_fences` — ```json ... ``` still parses
-  - [ ] `test_response_parser_invalid_json` — garbage → ResponseParseError
-  - [ ] `test_full_extraction_mocked` — mock GeminiClient, verify rows created in test DB
+- [x] Write `backend/app/services/gemini_client.py`
+  - [x] `GeminiClient.__init__` — configure genai, create model instance
+  - [x] `GeminiClient.extract_requirements(text, output_language) -> dict` — calls Gemini, returns parsed dict; raises `ExtractionError` on API failure
+- [x] Write `backend/app/services/prompt_builder.py`
+  - [x] `build_extraction_prompt(text, output_language) -> str`
+  - [x] German output: "Als...", "möchte ich...", "damit..."
+  - [x] English output: "As a...", "I want to...", "so that..."
+  - [x] Specifies exact JSON output structure (no markdown fences)
+  - [x] Limits source_snippet to 500 chars
+  - [x] Constrains category values and priority values
+- [x] Write `backend/app/services/response_parser.py`
+  - [x] `parse_gemini_response(response_text) -> dict`
+    - [x] Strip accidental markdown fences
+    - [x] Parse JSON
+    - [x] Validate 3 required keys present
+    - [x] Raise `ResponseParseError` on failure
+  - [x] `map_to_db_models(parsed, session_id) -> dict` — converts to SQLAlchemy model instances
+- [x] Replace stub in `backend/app/services/extraction_service.py` with full implementation
+  - [x] Creates own DB session (not request context)
+  - [x] Sets status='processing'
+  - [x] Parses all files (catches per-file errors, collects warnings)
+  - [x] Handles text_input as SourceDocument
+  - [x] Persists SourceDocuments
+  - [x] Builds combined text (truncated to 150,000 chars)
+  - [x] Calls GeminiClient.extract_requirements
+  - [x] Persists UserStory, NFR, OpenQuestion rows with sort_order
+  - [x] Sets status='completed' (or 'failed' on exception)
+  - [x] Stores warnings in session.error_message if partial failures
+- [x] Write `backend/tests/test_extraction.py`
+  - [x] `test_prompt_builder_german` — output contains German story format
+  - [x] `test_prompt_builder_english` — output contains English story format
+  - [x] `test_response_parser_valid` — valid JSON → parsed dict with 3 keys
+  - [x] `test_response_parser_strips_fences` — ```json ... ``` still parses
+  - [x] `test_response_parser_invalid_json` — garbage → ResponseParseError
+  - [x] `test_full_extraction_mocked` — mock GeminiClient, verify rows created in test DB
 
 ---
 
