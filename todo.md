@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 tasks complete
+## Progress: 134/134 tasks complete (backend prompts 1–9 done)
 
 ---
 
@@ -260,34 +260,34 @@
 
 ---
 
-## Prompt 9 — Export Endpoints
+## Prompt 9 — Export Endpoints ✅
 
-- [ ] Write `backend/app/services/exporter.py`
-  - [ ] `SessionExporter.to_json(session) -> dict`
-    - [ ] Includes meta: session_id, project_id, title, output_language, exported_at
-    - [ ] Excludes is_deleted=True items
-    - [ ] All fields for each item type
-  - [ ] `SessionExporter.to_markdown(session) -> str`
-    - [ ] Header: title + export timestamp
-    - [ ] User Stories section: formatted with Als/möchte/damit, acceptance criteria as list
-    - [ ] Source snippets as `<details>` elements
-    - [ ] NFRs section: table with #, Title, Category, Metric, Priority columns
-    - [ ] Open Questions section: numbered list with status
-    - [ ] Excludes is_deleted=True items
-- [ ] Write `backend/app/api/export.py`
-  - [ ] `GET /sessions/{session_id}/export?format=json|markdown`
-  - [ ] Verify session ownership → 404
-  - [ ] JSON: JSONResponse with Content-Disposition attachment header
-  - [ ] Markdown: Response with `text/markdown` media type + attachment header
-  - [ ] Unsupported format → 400
-- [ ] Wire export router into main APIRouter
-- [ ] Write `backend/tests/test_export.py`
-  - [ ] Setup: session with 2 user stories, 1 NFR, 1 OQ, 1 deleted story (direct DB insert)
-  - [ ] `test_export_json` → 200, valid JSON, deleted items excluded
-  - [ ] `test_export_markdown` → 200, `text/markdown`, contains "## User Stories"
-  - [ ] `test_export_invalid_format` (csv) → 400
-  - [ ] `test_export_unauthorized` (other user) → 404
-  - [ ] `test_json_structure` — has meta.session_id, user_stories, non_functional_requirements, open_questions keys
+- [x] Write `backend/app/services/exporter.py`
+  - [x] `SessionExporter.to_json(session) -> dict`
+    - [x] Includes meta: session_id, project_id, title, output_language, exported_at
+    - [x] Excludes is_deleted=True items
+    - [x] All fields for each item type
+  - [x] `SessionExporter.to_markdown(session) -> str`
+    - [x] Header: title + export timestamp
+    - [x] User Stories section: formatted with Als/möchte/damit, acceptance criteria as list
+    - [x] Source snippets as `<details>` elements
+    - [x] NFRs section: table with #, Title, Category, Metric, Priority columns
+    - [x] Open Questions section: numbered list with status
+    - [x] Excludes is_deleted=True items
+- [x] Write `backend/app/api/export.py`
+  - [x] `GET /sessions/{session_id}/export?format=json|markdown`
+  - [x] Verify session ownership → 404
+  - [x] JSON: JSONResponse with Content-Disposition attachment header
+  - [x] Markdown: Response with `text/markdown` media type + attachment header
+  - [x] Unsupported format → 400
+- [x] Wire export router into main APIRouter
+- [x] Write `backend/tests/test_export.py`
+  - [x] Setup: session with 2 user stories, 1 NFR, 1 OQ, 1 deleted story (direct DB insert)
+  - [x] `test_export_json` → 200, valid JSON, deleted items excluded
+  - [x] `test_export_markdown` → 200, `text/markdown`, contains "## User Stories"
+  - [x] `test_export_invalid_format` (csv) → 400
+  - [x] `test_export_unauthorized` (other user) → 404
+  - [x] `test_json_structure` — has meta.session_id, user_stories, non_functional_requirements, open_questions keys
 
 ---
 
