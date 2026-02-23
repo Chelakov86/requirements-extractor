@@ -246,27 +246,6 @@ editorial dashboard, not a generic SaaS template.
 - **Status badges**: Use distinct shapes/colors per status, not just color variations
 - **Empty states**: Illustrated or iconographic, not just grey text
 
-### Google Fonts to Load (in index.html)
-```html
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
-```
-
-### Tailwind Theme Extensions (tailwind.config.js)
-Extend with project-specific design tokens:
-```js
-theme: {
-  extend: {
-    fontFamily: {
-      heading: ['DM Sans', 'sans-serif'],
-      body: ['Source Sans 3', 'sans-serif'],
-    },
-    colors: {
-      // Define your palette here — will be populated from DESIGN.md
-    }
-  }
-}
-```
-
 ## Key Conventions
 
 ### Backend
