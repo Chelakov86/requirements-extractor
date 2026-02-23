@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api import auth, projects
+from app.api import auth, items, projects
 from app.api.sessions import router_projects as sessions_projects_router
 from app.api.sessions import router_sessions as sessions_router
 
@@ -13,3 +13,4 @@ router.include_router(
     tags=["sessions"],
 )
 router.include_router(sessions_router, prefix="/sessions", tags=["sessions"])
+router.include_router(items.router, prefix="/sessions", tags=["items"])

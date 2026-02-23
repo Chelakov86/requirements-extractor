@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 122/134 tasks complete
+## Progress: 134/134 tasks complete
 
 ---
 
@@ -218,45 +218,45 @@
 
 ---
 
-## Prompt 8 — Item CRUD Endpoints
+## Prompt 8 — Item CRUD Endpoints ✅
 
-- [ ] Write `backend/app/schemas/items.py`
-  - [ ] `UserStoryUpdate` (all optional fields)
-  - [ ] `UserStoryCreate` (title, as_who, i_want, so_that required)
-  - [ ] `NFRUpdate` (all optional)
-  - [ ] `NFRCreate` (title + category required)
-  - [ ] `OpenQuestionUpdate` (all optional)
-  - [ ] `OpenQuestionCreate` (question_text required)
-- [ ] Write `backend/app/api/items.py`
-  - [ ] `PATCH /sessions/{session_id}/user-stories/{item_id}` → 200
-  - [ ] `DELETE /sessions/{session_id}/user-stories/{item_id}` → 204 (soft delete)
-  - [ ] `POST /sessions/{session_id}/user-stories` → 201
-  - [ ] `POST /sessions/{session_id}/user-stories/{item_id}/restore` → 200
-  - [ ] `PATCH /sessions/{session_id}/non-functional-requirements/{item_id}` → 200
-  - [ ] `DELETE /sessions/{session_id}/non-functional-requirements/{item_id}` → 204
-  - [ ] `POST /sessions/{session_id}/non-functional-requirements` → 201
-  - [ ] `POST /sessions/{session_id}/non-functional-requirements/{item_id}/restore` → 200
-  - [ ] `PATCH /sessions/{session_id}/open-questions/{item_id}` → 200
-  - [ ] `DELETE /sessions/{session_id}/open-questions/{item_id}` → 204
-  - [ ] `POST /sessions/{session_id}/open-questions` → 201
-  - [ ] `POST /sessions/{session_id}/open-questions/{item_id}/restore` → 200
-  - [ ] All endpoints: verify session belongs to current user (404 otherwise)
-  - [ ] PATCH: apply only non-None fields, set updated_at = now()
-  - [ ] POST: sort_order = max existing + 1 or 0
-- [ ] Wire items router into main APIRouter
-- [ ] Write `backend/tests/test_items.py`
-  - [ ] Helper: `create_session_with_items(client, auth_headers, project_id)`
-  - [ ] `test_patch_user_story` — single field updated
-  - [ ] `test_patch_partial` — other fields unchanged
-  - [ ] `test_patch_not_found` → 404
-  - [ ] `test_delete_user_story_soft` → 204, not in GET session response
-  - [ ] `test_restore_user_story` → item reappears
-  - [ ] `test_add_user_story` → 201, appears in GET session
-  - [ ] `test_add_user_story_invalid` (missing field) → 422
-  - [ ] `test_patch_nfr` — at minimum PATCH test
-  - [ ] `test_delete_nfr` — soft delete
-  - [ ] `test_patch_open_question`
-  - [ ] `test_delete_open_question`
+- [x] Write `backend/app/schemas/items.py`
+  - [x] `UserStoryUpdate` (all optional fields)
+  - [x] `UserStoryCreate` (title, as_who, i_want, so_that required)
+  - [x] `NFRUpdate` (all optional)
+  - [x] `NFRCreate` (title + category required)
+  - [x] `OpenQuestionUpdate` (all optional)
+  - [x] `OpenQuestionCreate` (question_text required)
+- [x] Write `backend/app/api/items.py`
+  - [x] `PATCH /sessions/{session_id}/user-stories/{item_id}` → 200
+  - [x] `DELETE /sessions/{session_id}/user-stories/{item_id}` → 204 (soft delete)
+  - [x] `POST /sessions/{session_id}/user-stories` → 201
+  - [x] `POST /sessions/{session_id}/user-stories/{item_id}/restore` → 200
+  - [x] `PATCH /sessions/{session_id}/nfrs/{item_id}` → 200
+  - [x] `DELETE /sessions/{session_id}/nfrs/{item_id}` → 204
+  - [x] `POST /sessions/{session_id}/nfrs` → 201
+  - [x] `POST /sessions/{session_id}/nfrs/{item_id}/restore` → 200
+  - [x] `PATCH /sessions/{session_id}/questions/{item_id}` → 200
+  - [x] `DELETE /sessions/{session_id}/questions/{item_id}` → 204
+  - [x] `POST /sessions/{session_id}/questions` → 201
+  - [x] `POST /sessions/{session_id}/questions/{item_id}/restore` → 200
+  - [x] All endpoints: verify session belongs to current user (404 otherwise)
+  - [x] PATCH: apply only non-None fields, set updated_at = now()
+  - [x] POST: sort_order = max existing + 1 or 0
+- [x] Wire items router into main APIRouter
+- [x] Write `backend/tests/test_items.py`
+  - [x] Helper: `create_session_with_items(client, auth_headers, project_id)`
+  - [x] `test_patch_user_story` — single field updated
+  - [x] `test_patch_partial` — other fields unchanged
+  - [x] `test_patch_not_found` → 404
+  - [x] `test_delete_user_story_soft` → 204, not in GET session response
+  - [x] `test_restore_user_story` → item reappears
+  - [x] `test_add_user_story` → 201, appears in GET session
+  - [x] `test_add_user_story_invalid` (missing field) → 422
+  - [x] `test_patch_nfr` — at minimum PATCH test
+  - [x] `test_delete_nfr` — soft delete
+  - [x] `test_patch_open_question`
+  - [x] `test_delete_open_question`
 
 ---
 
