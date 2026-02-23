@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 18-prompt implementation plan.
 
-**Status**: Prompts 1–5 complete (79/134 tasks). Infrastructure, auth, project CRUD, file parsing, and test fixtures are all implemented. `todo.md` tracks remaining tasks.
+**Status**: Prompts 1–9 complete (backend fully implemented). Frontend scaffold only. `todo.md` tracks remaining tasks.
 
 ### What's done
 
@@ -17,10 +17,10 @@ An internal web tool for Business Analysts/PMs to extract structured requirement
 | 3 | JWT authentication (login, `get_current_user`) | ✅ Complete |
 | 4 | Project CRUD API with user isolation | ✅ Complete |
 | 5 | File parsing service (PDF, DOCX, XLSX, PPTX, TXT, MD) | ✅ Complete |
-| 6 | Session creation endpoint + background task stub | ❌ Not started |
-| 7 | Gemini integration (client, prompt builder, response parser) | ❌ Not started |
-| 8 | Item CRUD endpoints (UserStory, NFR, OpenQuestion) | ❌ Not started |
-| 9 | Export endpoints (JSON, Markdown) | ❌ Not started |
+| 6 | Session creation endpoint + background task stub | ✅ Complete |
+| 7 | Gemini integration (client, prompt builder, response parser) | ✅ Complete |
+| 8 | Item CRUD endpoints (UserStory, NFR, OpenQuestion) | ✅ Complete |
+| 9 | Export endpoints (JSON, Markdown) | ✅ Complete |
 | 10 | React foundation (routing, auth context, axios client) | ⚠️ Scaffold only |
 | 11–18 | Frontend pages, components, E2E tests, polish | ❌ Not started |
 
@@ -101,22 +101,22 @@ backend/
       __init__.py         # ✅ Main APIRouter; includes auth + projects sub-routers
       auth.py             # ✅ POST /auth/login (OAuth2PasswordRequestForm → token)
       projects.py         # ✅ GET/POST /projects, GET/DELETE /projects/{id}
-      sessions.py         # ❌ Not yet implemented
-      items.py            # ❌ Not yet implemented
-      export.py           # ❌ Not yet implemented
+      sessions.py         # ✅ POST /projects/{id}/sessions (202), GET /sessions/{id}/status, GET /sessions/{id}
+      items.py            # ✅ PATCH/DELETE/POST restore for user-stories, nfrs, questions
+      export.py           # ✅ GET /sessions/{id}/export?format=json|markdown
     schemas/
       __init__.py
       project.py          # ✅ ProjectCreate, ProjectResponse (with session_count)
-      session.py          # ❌ Not yet implemented
-      items.py            # ❌ Not yet implemented
+      session.py          # ✅ SessionCreate, SessionResponse, SessionStatusResponse
+      items.py            # ✅ UserStoryUpdate, NFRUpdate, OpenQuestionUpdate + response schemas
     services/
       __init__.py
       file_parser.py      # ✅ FileParser, ParsedDocument, validate_total_size
-      gemini_client.py    # ❌ Not yet implemented
-      prompt_builder.py   # ❌ Not yet implemented
-      response_parser.py  # ❌ Not yet implemented
-      extraction_service.py  # ❌ Not yet implemented
-      exporter.py         # ❌ Not yet implemented
+      gemini_client.py    # ✅ GeminiClient (JSON mode, structured output)
+      prompt_builder.py   # ✅ Builds extraction prompt (DE/EN, all item types)
+      response_parser.py  # ✅ Parses Gemini JSON response into DB models
+      extraction_service.py  # ✅ Background task: parse → prompt → Gemini → persist → status
+      exporter.py         # ✅ JSON and Markdown export formatters
   scripts/
     create_user.py        # ✅ CLI: --email, --password; bcrypt hash; duplicate email guard
   tests/
@@ -124,6 +124,10 @@ backend/
     test_auth.py          # ✅ 5 tests: login success/fail, protected endpoints
     test_projects.py      # ✅ 8 tests: CRUD, user isolation
     test_file_parser.py   # ✅ 8 tests: all formats + validation errors
+    test_sessions.py      # ✅ Session creation, status, full retrieval
+    test_extraction.py    # ✅ Extraction pipeline (mocked Gemini)
+    test_items.py         # ✅ Item CRUD, soft delete, restore
+    test_export.py        # ✅ JSON and Markdown export
     fixtures/
       sample.txt          # ✅
       sample.md           # ✅
@@ -216,6 +220,53 @@ MAX_TOTAL_SIZE_MB=50       # default
 
 Copy `.env.example` to `.env` and fill in `SECRET_KEY` and `GEMINI_API_KEY` before starting.
 
+## Frontend Design System
+
+### Anti-AI-Slop Rules (MANDATORY)
+- NEVER use Inter, Roboto, Arial, or system-ui fonts
+- NEVER use purple/violet gradients on white backgrounds
+- NEVER default to centered layouts with uniform rounded corners
+- NEVER use generic card shadows (shadow-md everywhere)
+- All components must follow the design system defined in DESIGN.md (if present)
+
+### Aesthetic Direction: "Editorial Utility"
+This is a professional PM/BA tool — the design should feel like a well-crafted 
+editorial dashboard, not a generic SaaS template.
+- **Typography**: Use a distinctive sans-serif pair from Google Fonts 
+  (e.g. DM Sans for headings + Source Sans 3 for body, or similar)
+- **Color palette**: Define via CSS variables in index.css. 
+  Use a strong primary accent (not blue-500) with muted neutrals.
+  Dark sidebar or top nav for visual weight.
+- **Layout**: Left-aligned content, asymmetric grid where appropriate, 
+  generous whitespace but information-dense where it matters (session results, item cards)
+- **Motion**: Subtle staggered reveals on page load, smooth tab transitions. 
+  No bouncing or excessive animation.
+- **Cards/Items**: Vary border treatments (left accent border vs. full border), 
+  avoid uniform rounded-xl on everything
+- **Status badges**: Use distinct shapes/colors per status, not just color variations
+- **Empty states**: Illustrated or iconographic, not just grey text
+
+### Google Fonts to Load (in index.html)
+```html
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+```
+
+### Tailwind Theme Extensions (tailwind.config.js)
+Extend with project-specific design tokens:
+```js
+theme: {
+  extend: {
+    fontFamily: {
+      heading: ['DM Sans', 'sans-serif'],
+      body: ['Source Sans 3', 'sans-serif'],
+    },
+    colors: {
+      // Define your palette here — will be populated from DESIGN.md
+    }
+  }
+}
+```
+
 ## Key Conventions
 
 ### Backend
@@ -246,20 +297,15 @@ Copy `.env.example` to `.env` and fill in `SECRET_KEY` and `GEMINI_API_KEY` befo
 ## API Endpoints (implemented)
 
 ```
-GET  /health                          # liveness check → {"status": "ok"}
-POST /api/v1/auth/login               # OAuth2 form → {access_token, token_type, expires_in}
-GET  /api/v1/projects                 # list user's projects [{id, name, session_count, ...}]
-POST /api/v1/projects                 # create project → 201
-GET  /api/v1/projects/{id}            # single project or 404
-DELETE /api/v1/projects/{id}          # hard delete → 204
-```
-
-## API Endpoints (planned)
-
-```
-POST   /api/v1/projects/{id}/sessions              # 202, starts background extraction
-GET    /api/v1/sessions/{id}/status                # {status, error_message}
-GET    /api/v1/sessions/{id}                       # full session with all items
+GET    /health                                              # liveness check → {"status": "ok"}
+POST   /api/v1/auth/login                                  # OAuth2 form → {access_token, token_type, expires_in}
+GET    /api/v1/projects                                    # list user's projects [{id, name, session_count, ...}]
+POST   /api/v1/projects                                    # create project → 201
+GET    /api/v1/projects/{id}                               # single project or 404
+DELETE /api/v1/projects/{id}                               # hard delete → 204
+POST   /api/v1/projects/{id}/sessions                      # 202, starts background extraction
+GET    /api/v1/sessions/{id}/status                        # {status, error_message}
+GET    /api/v1/sessions/{id}                               # full session with all items
 PATCH  /api/v1/sessions/{id}/user-stories/{item_id}
 DELETE /api/v1/sessions/{id}/user-stories/{item_id}
 POST   /api/v1/sessions/{id}/user-stories/{item_id}/restore
