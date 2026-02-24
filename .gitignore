@@ -24,3 +24,6 @@ postgres_data/
 
 # Claude Code
 .claude/
+
+# Playwright MCP
+.playwright-mcp/
