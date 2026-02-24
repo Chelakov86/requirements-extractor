@@ -115,7 +115,7 @@ export default function LoginForm({
 
         {/* Error message */}
         {error !== null && (
-          <p className="text-sm text-priority-critical" role="alert">
+          <p className="text-sm text-priority-critical" role="alert" data-testid="login-error">
             {error}
           </p>
         )}

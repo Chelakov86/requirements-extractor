@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 tasks complete (backend prompts 1–9 done)
+## Progress: 134/134 backend tasks complete + Prompt 10 ✅ (frontend foundation done)
 
 ---
 
@@ -291,40 +291,40 @@
 
 ---
 
-## Prompt 10 — React App Foundation
+## Prompt 10 — React App Foundation ✅
 
-- [ ] Configure `frontend/package.json` with all dependencies
-  - [ ] react, react-dom (18.x), react-router-dom (v6)
-  - [ ] @tanstack/react-query (v5), axios
-  - [ ] tailwindcss, postcss, autoprefixer
-  - [ ] @playwright/test (dev)
-- [ ] Configure `frontend/tailwind.config.js` with `./src/**/*.{ts,tsx}` content paths
-- [ ] Configure `frontend/vite.config.ts` with proxy `/api` → `http://backend:8000`
-- [ ] Write `frontend/src/lib/api.ts`
-  - [ ] Axios instance with baseURL `/api/v1`
-  - [ ] Request interceptor: add Bearer token from localStorage
-  - [ ] Response interceptor: on 401, clear token and redirect to /login
-- [ ] Write `frontend/src/context/AuthContext.tsx`
-  - [ ] `isAuthenticated`, `token`, `login(token)`, `logout()`
-  - [ ] Initialize from localStorage
-  - [ ] `logout()` removes token, redirects to /login
-- [ ] Write `frontend/src/components/ProtectedRoute.tsx` — redirect to /login if not authenticated
-- [ ] Write `frontend/src/pages/LoginPage.tsx`
-  - [ ] Email + Password fields with labels
-  - [ ] "Anmelden" submit button
-  - [ ] POST /auth/login, store token, redirect to /projects
-  - [ ] Error message `data-testid="login-error"` on 401
-  - [ ] Loading state during request
-  - [ ] Tailwind styling: centered card
-- [ ] Write `frontend/src/App.tsx` with all routes
-  - [ ] `/` → redirect to /projects
-  - [ ] `/login` → LoginPage (public)
-  - [ ] `/projects` → ProjectsPage (protected)
-  - [ ] `/projects/:projectId` → ProjectDetailPage (protected)
-  - [ ] `/projects/:projectId/sessions/new` → NewSessionPage (protected)
-  - [ ] `/sessions/:sessionId` → SessionDetailPage (protected)
-- [ ] Write `frontend/src/main.tsx` — wrap in `QueryClientProvider` + `AuthProvider`
-- [ ] Verify: app compiles, login page renders at `http://localhost:3000/login`, login redirects to /projects
+- [x] Configure `frontend/package.json` with all dependencies
+  - [x] react, react-dom (18.x), react-router-dom (v6)
+  - [x] @tanstack/react-query (v5), axios
+  - [x] tailwindcss, postcss, autoprefixer
+  - [x] @playwright/test (dev)
+- [x] Configure `frontend/tailwind.config.js` with `./src/**/*.{ts,tsx}` content paths
+- [x] Configure `frontend/vite.config.ts` with proxy `/api` → `http://backend:8000`
+- [x] Write `frontend/src/lib/api.ts`
+  - [x] Axios instance with baseURL `/api/v1`
+  - [x] Request interceptor: add Bearer token from localStorage
+  - [x] Response interceptor: on 401, clear token and redirect to /login
+- [x] Write `frontend/src/context/AuthContext.tsx`
+  - [x] `isAuthenticated`, `token`, `login(token)`, `logout()`
+  - [x] Initialize from localStorage
+  - [x] `logout()` removes token, redirects to /login
+- [x] Write `frontend/src/components/ProtectedRoute.tsx` — redirect to /login if not authenticated
+- [x] Write `frontend/src/pages/LoginPage.tsx`
+  - [x] Email + Password fields with labels
+  - [x] "Anmelden" submit button
+  - [x] POST /auth/login, store token, redirect to /projects
+  - [x] Error message `data-testid="login-error"` on 401
+  - [x] Loading state during request
+  - [x] Tailwind styling: centered card
+- [x] Write `frontend/src/App.tsx` with all routes
+  - [x] `/` → redirect to /projects
+  - [x] `/login` → LoginPage (public)
+  - [x] `/projects` → ProjectsPage (protected)
+  - [x] `/projects/:projectId` → ProjectDetailPage (protected)
+  - [x] `/projects/:projectId/sessions/new` → NewSessionPage (protected)
+  - [x] `/sessions/:sessionId` → SessionDetailPage (protected)
+- [x] Write `frontend/src/main.tsx` — wrap in `QueryClientProvider` + `AuthProvider`
+- [x] Verify: app compiles, login page renders at `http://localhost:3000/login`, login redirects to /projects
 
 ---
 

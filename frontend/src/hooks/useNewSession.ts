@@ -43,7 +43,7 @@ export function useNewSession(projectId: string): UseNewSessionReturn {
   async function handleSubmit() {
     setIsSubmitting(true)
     try {
-      const token = localStorage.getItem('token') ?? ''
+      const token = localStorage.getItem('access_token') ?? ''
       const formData = new FormData()
       formData.append('output_language', language)
       if (analysisName.trim()) formData.append('name', analysisName.trim())

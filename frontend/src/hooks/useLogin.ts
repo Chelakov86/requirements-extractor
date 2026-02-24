@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export interface UseLoginReturn {
   readonly email: string
@@ -18,6 +20,8 @@ export function useLogin(): UseLoginReturn {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   function togglePasswordVisibility() {
     setShowPassword((prev) => !prev)
@@ -37,12 +41,12 @@ export function useLogin(): UseLoginReturn {
         body: params,
       })
       if (!response.ok) {
-        setError('Ungültige E-Mail-Adresse oder Passwort.')
+        setError('Email oder Passwort falsch.')
         return
       }
       const data = (await response.json()) as { access_token: string }
-      localStorage.setItem('token', data.access_token)
-      window.location.href = '/projects'
+      login(data.access_token)
+      navigate('/projects', { replace: true })
     } catch {
       setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
     } finally {
