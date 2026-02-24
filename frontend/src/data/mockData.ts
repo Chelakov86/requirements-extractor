@@ -1,3 +1,120 @@
+// ── Projects ──────────────────────────────────────────────────────────────
+
+export type AccentColor = 'critical' | 'high' | 'medium' | 'low'
+export type OutputLanguage = 'de' | 'en'
+
+export interface MockProject {
+  id: string
+  title: string
+  description: string
+  sessionCount: number
+  lastUpdated: string
+  accentColor: AccentColor
+}
+
+export const MOCK_PROJECTS: MockProject[] = [
+  {
+    id: 'proj-001',
+    title: 'E-Commerce Replatforming',
+    description:
+      'Migration to Shopify Plus including ERP integration and payment gateway setup.',
+    sessionCount: 3,
+    lastUpdated: 'Okt 24, 2023',
+    accentColor: 'critical',
+  },
+  {
+    id: 'proj-002',
+    title: 'CRM Implementation',
+    description:
+      'Salesforce rollout for the sales team across 3 regions (EMEA, NA, APAC).',
+    sessionCount: 5,
+    lastUpdated: 'Okt 20, 2023',
+    accentColor: 'high',
+  },
+  {
+    id: 'proj-003',
+    title: 'Mobile App Redesign',
+    description:
+      'UX/UI overhaul for iOS and Android customer apps based on Q3 user feedback.',
+    sessionCount: 1,
+    lastUpdated: 'Okt 15, 2023',
+    accentColor: 'medium',
+  },
+  {
+    id: 'proj-004',
+    title: 'Internal Audit Tool',
+    description:
+      'Development of a compliance checking tool for the finance department.',
+    sessionCount: 0,
+    lastUpdated: 'Okt 12, 2023',
+    accentColor: 'low',
+  },
+]
+
+export const PROJECTS_PAGE_CONTENT = {
+  pageTitle: 'Meine Projekte',
+  newProjectLabel: 'Neues Projekt',
+  activeSectionTitle: 'Aktive Projekte',
+  sortLabel: 'Sortieren',
+  emptyArchive: {
+    heading: 'Noch keine Projekte im Archiv',
+    body: 'Abgeschlossene Projekte erscheinen hier. Beginnen Sie, indem Sie Ihr erstes Projekt erstellen oder vorhandene Projekte analysieren.',
+    ctaLabel: 'Neues Projekt erstellen',
+  },
+  sessionCountLabel: (n: number) => (n === 1 ? '1 Analyse' : `${n} Analysen`),
+  footer: '© 2025 Requirements Extractor. All rights reserved.',
+} as const
+
+// ── New Session ────────────────────────────────────────────────────────────
+
+export const NEW_SESSION_CONTENT = {
+  pageTitle: 'Neue Analyse',
+  tabs: {
+    text: 'Text eingeben',
+    files: 'Dateien hochladen',
+  },
+  textInput: {
+    label: 'Anforderungstext',
+    maxChars: 500_000,
+  },
+  analysisName: {
+    label: 'Analysename (optional)',
+    placeholder: 'z.B. Q1 Lageroptimierung',
+  },
+  language: {
+    label: 'Ausgabesprache',
+    options: [
+      { value: 'de' as OutputLanguage, label: 'Deutsch', flag: '🇩🇪' },
+      { value: 'en' as OutputLanguage, label: 'English', flag: '🇬🇧' },
+    ],
+  },
+  fileUpload: {
+    dropzoneLabel: 'Dateien hierher ziehen oder',
+    browseLabel: 'Durchsuchen',
+    hint: 'PDF, DOCX, XLSX, PPTX, TXT, MD · Max. 30 MB pro Datei, 50 MB gesamt',
+  },
+  actions: {
+    cancel: 'Abbrechen',
+    submit: 'Extraktion starten',
+  },
+} as const
+
+export const MOCK_SAMPLE_TEXT = `Spezifikation für das neue ERP-Modul "Lagerhaltung"
+
+1. Zielsetzung
+Das System soll eine vollautomatisierte Bestandsüberwachung ermöglichen. Dabei ist sicherzustellen, dass Mindestbestände nicht unterschritten werden.
+
+2. Funktionale Anforderungen
+- Der Nutzer muss in der Lage sein, neue Artikel manuell anzulegen.
+- Das System muss bei Wareneingang automatisch den Lagerbestand aktualisieren.
+- Eine Schnittstelle zu SAP S/4HANA ist zwingend erforderlich.
+
+3. Nicht-funktionale Anforderungen
+- Die Antwortzeit bei Abfragen darf 200ms nicht überschreiten.
+- Das System muss 24/7 verfügbar sein (99.9% Uptime SLA).`
+
+// ── Login ──────────────────────────────────────────────────────────────────
+
 export const LOGIN_CONTENT = {
   brand: {
     name: 'Requirements Extractor',
