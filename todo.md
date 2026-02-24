@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–11 ✅ (frontend foundation + projects dashboard done)
+## Progress: 134/134 backend tasks complete + Prompts 10–12 ✅ (frontend foundation + projects dashboard + new extraction form done)
 
 ---
 
@@ -359,27 +359,27 @@
 
 ---
 
-## Prompt 12 — New Extraction Form
+## Prompt 12 — New Extraction Form ✅
 
-- [ ] Write `frontend/src/lib/format.ts` — `formatBytes(bytes) -> string`
-- [ ] Write `frontend/src/hooks/useCreateSession.ts`
-  - [ ] `useMutation` calling POST /projects/{projectId}/sessions with FormData
-  - [ ] `Content-Type: multipart/form-data` header
-- [ ] Write `frontend/src/pages/NewSessionPage.tsx`
-  - [ ] Two tabs: "Text eingeben" / "Dateien hochladen"
-  - [ ] Text tab: textarea (min 200px), character counter (X / 500,000)
-  - [ ] File tab: drag-and-drop zone with dotted border
-    - [ ] Accept `.pdf,.docx,.txt,.md,.xlsx,.pptx`
-    - [ ] File chips with name, size (formatted), ✕ remove button
-    - [ ] Per-file error chip (red) if > 30 MB
-    - [ ] Total size warning banner (orange) if > 50 MB
-    - [ ] `data-testid="file-input"` on hidden file input
-  - [ ] Configuration section: optional title field, language dropdown (DE/EN, default DE)
-  - [ ] "Extraktion starten" button
-    - [ ] Disabled until valid input (text ≥ 50 chars OR ≥ 1 valid file)
-  - [ ] "Abbrechen" link back to project detail
-  - [ ] On submit: POST with FormData, navigate to /sessions/{id} on 202
-  - [ ] Error banner on 4xx with error.detail.message
+- [x] Write `frontend/src/lib/format.ts` — `formatBytes(bytes) -> string`
+- [x] Write `frontend/src/hooks/useCreateSession.ts`
+  - [x] `useMutation` calling POST /projects/{projectId}/sessions with FormData
+  - [x] `Content-Type: multipart/form-data` header
+- [x] Write `frontend/src/pages/NewSessionPage.tsx`
+  - [x] Two tabs: "Text eingeben" / "Dateien hochladen"
+  - [x] Text tab: textarea (min 200px), character counter (X / 500,000)
+  - [x] File tab: drag-and-drop zone with dotted border
+    - [x] Accept `.pdf,.docx,.txt,.md,.xlsx,.pptx`
+    - [x] File chips with name, size (formatted), ✕ remove button
+    - [x] Per-file error chip (red) if > 30 MB
+    - [x] Total size warning banner (orange) if > 50 MB
+    - [x] `data-testid="file-input"` on hidden file input
+  - [x] Configuration section: optional title field, language dropdown (DE/EN, default DE)
+  - [x] "Extraktion starten" button
+    - [x] Disabled until valid input (text ≥ 50 chars OR ≥ 1 valid file)
+  - [x] "Abbrechen" link back to project detail
+  - [x] On submit: POST with FormData, navigate to /sessions/{id} on 202
+  - [x] Error banner on 4xx with error.detail.message
 
 ---
 
