@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompt 10 ✅ (frontend foundation done)
+## Progress: 134/134 backend tasks complete + Prompts 10–11 ✅ (frontend foundation + projects dashboard done)
 
 ---
 
@@ -328,32 +328,34 @@
 
 ---
 
-## Prompt 11 — Projects Dashboard
+## Prompt 11 — Projects Dashboard ✅
 
-- [ ] Write `frontend/src/hooks/useProjects.ts`
-  - [ ] `useProjects()` — GET /projects query
-  - [ ] `useCreateProject()` — POST /projects mutation
-  - [ ] `useDeleteProject()` — DELETE /projects/{id} mutation
-- [ ] Write `frontend/src/components/Layout.tsx`
-  - [ ] Top nav: "Requirements Extractor" + logout button
-  - [ ] Max-width content container
-- [ ] Write `frontend/src/pages/ProjectsPage.tsx`
-  - [ ] Header + "Neues Projekt" button
-  - [ ] Project grid/list (cards with name, description, session_count, created_at)
-  - [ ] Empty state: "Noch keine Projekte..." + create button
-  - [ ] Loading state: 3 skeleton cards with pulse animation
-  - [ ] Click card → navigate to `/projects/{id}`
-  - [ ] CreateProjectModal: name (required) + description textarea, submit creates project
-  - [ ] Delete flow: hover shows delete icon, click shows inline confirm
-- [ ] Write `frontend/src/pages/ProjectDetailPage.tsx`
-  - [ ] Header: project name + back button
-  - [ ] "Neue Extraktion" button → navigate to /sessions/new
-  - [ ] Session list (title or fallback, status badge, item counts)
-  - [ ] Each session row clickable → /sessions/{id}
-  - [ ] Empty state for sessions
-  - [ ] Loading skeletons
-  - [ ] Uses `GET /projects/{projectId}/sessions` endpoint
-- [ ] Wrap all protected pages in `<Layout>`
+- [x] Write `frontend/src/hooks/useProjects.ts`
+  - [x] `useProjects()` — GET /projects query
+  - [x] `useCreateProject()` — POST /projects mutation
+  - [x] `useDeleteProject()` — DELETE /projects/{id} mutation
+  - [x] `useProject(id)` — GET /projects/{id} query
+  - [x] `useProjectSessions(projectId)` — GET /projects/{projectId}/sessions query
+- [x] Write `frontend/src/components/Layout.tsx`
+  - [x] Top nav: "Requirements Extractor" + logout button
+  - [x] Renders child routes via `<Outlet />`
+- [x] Write `frontend/src/pages/ProjectsPage.tsx`
+  - [x] Header + "Neues Projekt" button
+  - [x] Project grid/list (cards with name, description, session_count, created_at)
+  - [x] Empty state: "Noch keine Projekte..." + create button
+  - [x] Loading state: 3 skeleton cards with pulse animation
+  - [x] Click card → navigate to `/projects/{id}`
+  - [x] CreateProjectModal: name (required) + description textarea, submit creates project
+  - [x] Delete flow: hover shows delete icon, click shows inline confirm
+- [x] Write `frontend/src/pages/ProjectDetailPage.tsx`
+  - [x] Header: project name + back button
+  - [x] "Neue Extraktion" button → navigate to /sessions/new
+  - [x] Session list (title or fallback, status badge, item counts)
+  - [x] Each session row clickable → /sessions/{id}
+  - [x] Empty state for sessions
+  - [x] Loading skeletons
+  - [x] Uses `GET /projects/{projectId}/sessions` endpoint
+- [x] Wrap all protected pages in `<Layout>`
 
 ---
 

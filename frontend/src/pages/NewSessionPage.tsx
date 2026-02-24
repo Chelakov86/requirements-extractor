@@ -1,5 +1,4 @@
 import { useRef } from 'react'
-import TopNav from '../components/TopNav'
 import LanguageSelect from '../components/LanguageSelect'
 import { useNewSession } from '../hooks/useNewSession'
 import { NEW_SESSION_CONTENT } from '../data/mockData'
@@ -35,9 +34,7 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopNav />
-
+    <div className="flex flex-col flex-1">
       {/* Page header */}
       <header className="bg-white border-b border-border py-5 px-6 shrink-0">
         <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-1">

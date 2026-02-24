@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import TopNav from '../components/TopNav'
 import SessionHeader, { type SessionTab } from '../components/SessionHeader'
 import UserStoryCard from '../components/UserStoryCard'
 import NFRCard from '../components/NFRCard'
@@ -39,9 +38,7 @@ export default function SessionDetailPage() {
   const hasMore = visibleCount < totalForTab
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopNav userInitials="AS" />
-
+    <div className="flex flex-col flex-1">
       <SessionHeader
         projectName={session.project_name}
         sessionName={session.session_name}

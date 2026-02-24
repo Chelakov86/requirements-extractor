@@ -1,36 +1,68 @@
-import { useState } from 'react'
-import { MOCK_PROJECTS, type MockProject, type AccentColor } from '../data/mockData'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import api from '../lib/api'
 
-const ACCENT_CYCLE: AccentColor[] = ['critical', 'high', 'medium', 'low']
-
-export interface UseProjectsReturn {
-  readonly projects: MockProject[]
-  createProject: (title: string, description: string) => void
-  deleteProject: (id: string) => void
+export interface Project {
+  id: string
+  name: string
+  description: string | null
+  session_count: number
+  created_at: string
+  updated_at: string | null
 }
 
-export function useProjects(): UseProjectsReturn {
-  const [projects, setProjects] = useState<MockProject[]>(MOCK_PROJECTS)
+export interface SessionSummary {
+  id: string
+  project_id: string
+  title: string | null
+  status: 'pending' | 'processing' | 'completed' | 'failed'
+  output_language: string
+  user_story_count: number
+  nfr_count: number
+  open_question_count: number
+  created_at: string
+}
 
-  function createProject(title: string, description: string) {
-    const newProject: MockProject = {
-      id: `proj-${Date.now()}`,
-      title,
-      description,
-      sessionCount: 0,
-      lastUpdated: new Date().toLocaleDateString('de-DE', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      }),
-      accentColor: ACCENT_CYCLE[projects.length % ACCENT_CYCLE.length],
-    }
-    setProjects((prev) => [newProject, ...prev])
-  }
+export function useProjects() {
+  return useQuery({
+    queryKey: ['projects'],
+    queryFn: (): Promise<Project[]> => api.get('/projects').then(r => r.data),
+  })
+}
 
-  function deleteProject(id: string) {
-    setProjects((prev) => prev.filter((p) => p.id !== id))
-  }
+export function useProject(id: string) {
+  return useQuery({
+    queryKey: ['projects', id],
+    queryFn: (): Promise<Project> => api.get(`/projects/${id}`).then(r => r.data),
+    enabled: !!id,
+  })
+}
 
-  return { projects, createProject, deleteProject }
+export function useProjectSessions(projectId: string) {
+  return useQuery({
+    queryKey: ['projects', projectId, 'sessions'],
+    queryFn: (): Promise<SessionSummary[]> =>
+      api.get(`/projects/${projectId}/sessions`).then(r => r.data),
+    enabled: !!projectId,
+  })
+}
+
+export function useCreateProject() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { name: string; description?: string }) =>
+      api.post<Project>('/projects', data).then(r => r.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+  })
+}
+
+export function useDeleteProject() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.delete(`/projects/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+  })
 }
