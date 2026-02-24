@@ -1,3 +1,31 @@
+export const LOGIN_CONTENT = {
+  brand: {
+    name: 'Requirements Extractor',
+    tagline: 'Anforderungen. Strukturiert. Sofort.',
+    description:
+      'Das professionelle Werkzeug für Business Analysten und Projektmanager zur effizienten Anforderungsanalyse.',
+    version: 'Internal Tool v2.4.0',
+  },
+  form: {
+    headline: 'Willkommen zurück',
+    subheadline: 'Bitte melden Sie sich an, um fortzufahren.',
+    emailLabel: 'E-Mail-Adresse',
+    emailPlaceholder: 'name@company.com',
+    passwordLabel: 'Passwort',
+    passwordPlaceholder: 'Passwort eingeben',
+    forgotPasswordText: 'Passwort vergessen?',
+    submitText: 'Anmelden',
+  },
+  footer: {
+    copyright: '© 2025 Requirements Extractor',
+    links: [
+      { label: 'Impressum', href: '#' },
+      { label: 'Datenschutz', href: '#' },
+      { label: 'Hilfe', href: '#' },
+    ],
+  },
+} as const
+
 export type Priority = 'low' | 'medium' | 'high' | 'critical'
 export type NFRCategory =
   | 'Performance'

@@ -1,5 +1,5 @@
-import SessionDetailPage from './pages/SessionDetailPage'
+import LoginPage from './pages/LoginPage'
 
 export default function App() {
-  return <SessionDetailPage />
+  return <LoginPage />
 }
