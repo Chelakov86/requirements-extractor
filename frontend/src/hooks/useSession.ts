@@ -12,7 +12,8 @@ export interface ApiSession {
   created_at: string
   updated_at: string | null
   user_stories: UserStory[]
-  nfrs: NFR[]
+  // Backend field name is non_functional_requirements (from SessionDetailResponse)
+  non_functional_requirements: NFR[]
   open_questions: OpenQuestion[]
 }
 

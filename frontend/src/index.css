@@ -212,4 +212,15 @@
     border: 2px dashed var(--color-interactive);
     color: var(--color-text-muted);
   }
+
+  /* ── Undo toast countdown bar ─────────────────────────────────── */
+  .toast-countdown-bar {
+    width: 100%;
+    animation: toast-countdown 5s linear forwards;
+  }
+}
+
+@keyframes toast-countdown {
+  from { width: 100%; }
+  to   { width: 0%; }
 }

@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir --upgrade pip \
         pydantic-settings \
         "python-jose[cryptography]" \
         "passlib[bcrypt]" \
-        google-generativeai \
+        google-genai \
         PyMuPDF \
         python-docx \
         openpyxl \

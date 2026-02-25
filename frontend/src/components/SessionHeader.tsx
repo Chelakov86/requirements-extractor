@@ -1,6 +1,7 @@
 import ExportMenu from './ExportMenu'
 
 export type SessionTab = 'user-stories' | 'nfrs' | 'open-questions'
+export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 export interface SessionHeaderProps {
   readonly projectName: string
@@ -9,6 +10,8 @@ export interface SessionHeaderProps {
   readonly counts: { userStories: number; nfrs: number; openQuestions: number }
   readonly activeTab: SessionTab
   readonly onTabChange: (tab: SessionTab) => void
+  readonly saveState?: SaveState
+  readonly isDirty?: boolean
   readonly onSave?: () => void
   readonly onExport?: (format: 'json' | 'markdown') => void
 }
@@ -20,9 +23,14 @@ export default function SessionHeader({
   counts,
   activeTab,
   onTabChange,
+  saveState = 'idle',
+  isDirty = false,
   onSave,
   onExport,
 }: SessionHeaderProps) {
+  const isSaving = saveState === 'saving'
+  const isSaved = saveState === 'saved'
+
   return (
     <header className="bg-white border-b border-border py-5 px-6 md:px-10 lg:px-20 sticky top-0 z-10">
       <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -40,11 +48,29 @@ export default function SessionHeader({
         <div className="flex items-center gap-3 shrink-0">
           <ExportMenu sessionId={sessionId} onExport={onExport} />
           <button
-            className="btn-primary flex items-center gap-2 h-10 px-5"
+            className="btn-primary flex items-center gap-2 h-10 px-5 disabled:opacity-60 disabled:cursor-not-allowed"
             onClick={onSave}
+            disabled={isSaving || (!isDirty && !isSaved)}
+            data-testid="save-button"
           >
-            <span className="material-symbols-outlined text-[18px]">save</span>
-            <span>Speichern</span>
+            {isSaving ? (
+              <>
+                <span className="material-symbols-outlined text-[18px] animate-spin">
+                  progress_activity
+                </span>
+                <span>Speichert…</span>
+              </>
+            ) : isSaved ? (
+              <>
+                <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                <span>Gespeichert ✓</span>
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-[18px]">save</span>
+                <span>Speichern</span>
+              </>
+            )}
           </button>
         </div>
       </div>

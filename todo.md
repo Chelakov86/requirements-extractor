@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–13 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page done)
+## Progress: 134/134 backend tasks complete + Prompts 10–14 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing done)
 
 ---
 
@@ -424,44 +424,50 @@
 
 ---
 
-## Prompt 14 — Inline Editing & Item Management
+## Prompt 14 — Inline Editing & Item Management ✅
 
-- [ ] Add local state management to `SessionDetailPage.tsx`
-  - [ ] `localItems` state initialized from server data on load
-  - [ ] Track which items have been modified
-- [ ] Update `UserStoryCard.tsx` — add edit mode
-  - [ ] Edit mode toggle (pencil icon) with `data-testid="edit-story-btn"`
-  - [ ] In edit mode: all fields become inputs/textareas
-  - [ ] Priority `<select>` (low/medium/high/critical)
-  - [ ] Labels: tag input (✕ to remove, Enter to add)
-  - [ ] Acceptance criteria: textarea per item + "Add criterion" button
-  - [ ] Cancel button restores original values
-  - [ ] Escape key cancels editing
-  - [ ] `onUpdate(id, changes)` callback prop
-- [ ] Update `NFRCard.tsx` — add edit mode
-  - [ ] title, category (select), description, metric, priority all editable
-  - [ ] Same cancel/escape behavior
-- [ ] Update `OpenQuestionCard.tsx` — add edit mode
-  - [ ] question_text, owner, status (select: open/resolved) editable
-- [ ] Add delete + undo toast logic to `SessionDetailPage.tsx`
-  - [ ] `handleDeleteItem(id, type)` — remove from localItems immediately
-  - [ ] Start 5s timer, call DELETE API on timeout
-  - [ ] `handleUndoDelete()` — cancel timer, restore item
-  - [ ] Pass delete handlers to cards (`data-testid="delete-story-btn"`)
-- [ ] Write `frontend/src/components/UndoToast.tsx`
-  - [ ] Fixed bottom-center, "Item gelöscht. [Rückgängig]" link
-  - [ ] 5s countdown progress bar
-  - [ ] `data-testid="undo-toast"`
-- [ ] Add "Add item" inline forms below each tab list
-  - [ ] "+ User Story hinzufügen" → inline form, POST on submit
-    - [ ] `data-testid="new-story-title"`, `data-testid="new-story-as-who"`, etc.
-  - [ ] "+ NFR hinzufügen" → inline form for NFR fields
-  - [ ] "+ Offene Frage hinzufügen" → inline form for question
-- [ ] Implement save flow
-  - [ ] `useUpdateItem()` hook — PATCH single item
-  - [ ] `handleSave()` — PATCH all modified items, refetch session, show "Gespeichert ✓" toast
-  - [ ] Spinner on save button while saving
-  - [ ] Error banner on save failure
+- [x] Add local state management to `SessionDetailPage.tsx`
+  - [x] `localItems` state initialized from server data on load
+  - [x] Track which items have been modified (`isDirty` flag)
+- [x] Update `UserStoryCard.tsx` — add edit mode
+  - [x] Edit mode toggle (pencil icon) with `data-testid="edit-story-btn"`
+  - [x] In edit mode: all fields become inputs/textareas
+  - [x] Priority `<select>` (low/medium/high/critical)
+  - [x] Labels: tag input (✕ to remove, Enter to add)
+  - [x] Acceptance criteria: textarea per item + "Add criterion" button
+  - [x] Cancel button restores original values
+  - [x] Escape key cancels editing
+  - [x] `onUpdate(id, changes)` callback prop
+- [x] Update `NFRCard.tsx` — add edit mode
+  - [x] title, category (select), description, metric, priority all editable
+  - [x] Same cancel/escape behavior
+  - [x] Fixed category casing bug (API returns lowercase; normalized for display)
+- [x] Update `OpenQuestionCard.tsx` — add edit mode
+  - [x] question_text, owner, status (select: open/answered/deferred) editable
+  - [x] Fixed `OpenQuestionUpdate` schema: was `"open"|"resolved"`, now `"open"|"answered"|"deferred"`
+- [x] Add delete + undo toast logic to `SessionDetailPage.tsx`
+  - [x] `handleDeleteItem(id, type)` — remove from localItems immediately (optimistic)
+  - [x] Start 5s timer, call DELETE API on timeout
+  - [x] `handleUndoDelete()` — cancel timer, restore item to localItems
+  - [x] Pass delete handlers to cards
+- [x] Write `frontend/src/components/UndoToast.tsx`
+  - [x] Fixed bottom-center, "Element gelöscht. [Rückgängig]" link
+  - [x] 5s countdown progress bar (CSS animation)
+  - [x] `data-testid="undo-toast"`, `data-testid="undo-button"`
+- [x] Add "Add item" inline forms below each tab list
+  - [x] "+ User Story hinzufügen" → inline form, POST on submit
+  - [x] "+ NFR hinzufügen" → inline form for NFR fields
+  - [x] "+ Offene Frage hinzufügen" → inline form for question
+- [x] Implement save flow
+  - [x] `useUpdateItem()` hook — PATCH/DELETE/POST create for all item types
+  - [x] `handleSave()` — diff `localItems` vs `serverItemsRef`, PATCH only changed fields
+  - [x] Spinner on save button while saving ("Speichert…")
+  - [x] "Gespeichert ✓" state for 2s after successful save
+  - [x] Error banner on save failure
+  - [x] Save button disabled when no changes (`isDirty=false`)
+- [x] Fixed `useSession.ts`: API field `non_functional_requirements` (was incorrectly `nfrs`)
+- [x] Fixed `Dockerfile`: was installing `google-generativeai` (old SDK), now `google-genai`
+- [x] Fixed `gemini_client.py`: model updated from `gemini-1.5-pro` → `gemini-2.0-flash`
 
 ---
 

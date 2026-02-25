@@ -52,7 +52,7 @@ class NFRCreate(BaseModel):
 class OpenQuestionUpdate(BaseModel):
     question_text: str | None = None
     owner: str | None = None
-    status: Literal["open", "resolved"] | None = None
+    status: Literal["open", "answered", "deferred"] | None = None
 
 
 class OpenQuestionCreate(BaseModel):
