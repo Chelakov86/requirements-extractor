@@ -54,7 +54,7 @@ export default function SessionDetailPage() {
 
   const sessionTitle = session.title
     ? session.title
-    : `Extraktion vom ${new Date(session.created_at).toLocaleDateString('de-DE', {
+    : `Anforderungserfassung vom ${new Date(session.created_at).toLocaleDateString('de-DE', {
         day: '2-digit',
         month: 'short',
         year: 'numeric',

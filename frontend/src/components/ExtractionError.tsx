@@ -22,7 +22,7 @@ export default function ExtractionError({ message }: ExtractionErrorProps) {
       {/* Heading + message */}
       <div className="flex flex-col items-center gap-2">
         <h2 className="text-slate text-xl font-bold" style={{ letterSpacing: '-0.01em' }}>
-          Extraktion fehlgeschlagen
+          Anforderungserfassung fehlgeschlagen
         </h2>
         {message && (
           <p className="text-muted text-sm max-w-sm leading-relaxed">{message}</p>

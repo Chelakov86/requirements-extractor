@@ -16,7 +16,7 @@ export default function ExtractionProgress() {
           Dokument wird analysiert…
         </p>
         <p className="text-muted text-sm max-w-xs leading-relaxed">
-          Die KI extrahiert Anforderungen aus Ihren Dokumenten.
+          Die KI erfasst Anforderungen aus Ihren Dokumenten.
           <br />
           Dies kann bis zu einer Minute dauern.
         </p>

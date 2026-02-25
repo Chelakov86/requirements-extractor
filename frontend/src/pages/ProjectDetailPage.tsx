@@ -80,9 +80,9 @@ function EmptyState({ onNewClick }: { onNewClick: () => void }) {
       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
         <span className="material-symbols-outlined text-primary text-[24px]">science</span>
       </div>
-      <p className="text-sm font-semibold text-slate">Noch keine Extraktionen</p>
+      <p className="text-sm font-semibold text-slate">Noch keine Anforderungserfassungen</p>
       <p className="text-xs text-muted text-center max-w-[280px] leading-relaxed">
-        Starte eine neue Extraktion, um Anforderungen aus Dokumenten zu gewinnen.
+        Starte eine neue Anforderungserfassung, um Anforderungen aus Dokumenten zu gewinnen.
       </p>
       <button onClick={onNewClick} className="btn-ghost h-8 px-4 text-sm mt-1">
         Jetzt starten
@@ -141,14 +141,14 @@ export default function ProjectDetailPage() {
         <div className="max-w-[1200px] mx-auto w-full">
           {/* Section header */}
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-lg font-semibold text-slate">Extraktions-Sessions</h3>
+            <h3 className="text-lg font-semibold text-slate">Anforderungserfassungen</h3>
             <button
               onClick={() => navigate(`/projects/${projectId}/sessions/new`)}
               className="btn-primary h-9 px-4 gap-2 text-sm"
               data-testid="new-session-btn"
             >
               <span className="material-symbols-outlined text-[18px]">add</span>
-              Neue Extraktion
+              Neue Anforderungserfassung
             </button>
           </div>
 

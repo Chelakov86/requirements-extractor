@@ -95,7 +95,7 @@ export const NEW_SESSION_CONTENT = {
   },
   actions: {
     cancel: 'Abbrechen',
-    submit: 'Extraktion starten',
+    submit: 'Anforderungserfassung starten',
   },
 } as const
 
