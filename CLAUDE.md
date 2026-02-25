@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 18-prompt implementation plan.
 
-**Status**: Prompts 1–9 complete (backend fully implemented). Frontend scaffold only. `todo.md` tracks remaining tasks.
+**Status**: Prompts 1–13 complete (backend fully implemented, frontend through session detail). `todo.md` tracks remaining tasks.
 
 ### What's done
 
@@ -21,8 +21,12 @@ An internal web tool for Business Analysts/PMs to extract structured requirement
 | 7 | Gemini integration (client, prompt builder, response parser) | ✅ Complete |
 | 8 | Item CRUD endpoints (UserStory, NFR, OpenQuestion) | ✅ Complete |
 | 9 | Export endpoints (JSON, Markdown) | ✅ Complete |
-| 10 | React foundation (routing, auth context, axios client) | ⚠️ Scaffold only |
-| 11–18 | Frontend pages, components, E2E tests, polish | ❌ Not started |
+| 10 | React foundation (routing, auth context, axios client) | ✅ Complete |
+| 11 | Projects dashboard (list, create, delete, project detail) | ✅ Complete |
+| 12 | New extraction form (text/file upload, validation, submit) | ✅ Complete |
+| 13 | Session detail page (polling, progress, results layout) | ✅ Complete |
+| 14 | Inline editing, item management, undo toast | ❌ Not started |
+| 15–18 | Export UI, error handling, E2E tests, accessibility, README | ❌ Not started |
 
 ## Tech Stack
 
@@ -142,36 +146,48 @@ frontend/
   vite.config.ts          # Proxy /api → localhost:8000
   tailwind.config.js
   src/
-    main.tsx              # ✅ ReactDOM.render entry point
-    App.tsx               # ⚠️ Placeholder only — no routing, no auth yet
-    index.css             # ✅ Tailwind directives
+    main.tsx              # ✅ Entry: QueryClientProvider + AuthProvider
+    App.tsx               # ✅ All routes with ProtectedRoute wrappers
+    index.css             # ✅ Tailwind directives + CSS variables
+    data/
+      mockData.ts         # ✅ Mock data for dev/storybook use
     lib/
-      api.ts              # ❌ Axios instance with JWT Authorization header interceptor
-      format.ts           # ❌ formatBytes utility
+      api.ts              # ✅ Axios instance with JWT interceptor + 401 redirect
+      format.ts           # ✅ formatBytes utility
     context/
-      AuthContext.tsx      # ❌ Auth state (token, user, login, logout)
+      AuthContext.tsx      # ✅ Auth state (token, login, logout) from localStorage
     components/
-      Layout.tsx           # ❌ Nav + page container
-      ProtectedRoute.tsx   # ❌ Redirect to /login if unauthenticated
-      UserStoryCard.tsx    # ❌ Read + inline edit
-      NFRCard.tsx          # ❌ Read + inline edit
-      OpenQuestionCard.tsx # ❌ Read + inline edit
-      ExtractionProgress.tsx  # ❌ Polling spinner
-      ExportMenu.tsx       # ❌ JSON/Markdown download dropdown
-      UndoToast.tsx        # ❌ 5s undo notification
+      Layout.tsx           # ✅ Top nav + Outlet
+      TopNav.tsx           # ✅ App name + logout button
+      ProtectedRoute.tsx   # ✅ Redirect to /login if unauthenticated
+      LoginLeftPanel.tsx   # ✅ Branding panel for login page
+      LoginForm.tsx        # ✅ Email/password form with error state
+      ProjectCard.tsx      # ✅ Project card with delete confirm
+      ProjectsEmptyState.tsx  # ✅ Empty state for projects list
+      PriorityBadge.tsx    # ✅ Priority color badge component
+      LanguageSelect.tsx   # ✅ DE/EN language dropdown
+      SessionHeader.tsx    # ✅ Tab bar (User Stories/NFRs/Fragen) + export/save buttons
+      UserStoryCard.tsx    # ✅ Display card (read-only; edit mode in Prompt 14)
+      NFRCard.tsx          # ✅ Display card (read-only; edit mode in Prompt 14)
+      OpenQuestionCard.tsx # ✅ Display card (read-only; edit mode in Prompt 14)
+      ExtractionProgress.tsx  # ✅ Polling spinner with status message
+      ExtractionError.tsx  # ✅ Error state with retry button
+      ExportMenu.tsx       # ✅ Placeholder (wired in Prompt 15)
+      UndoToast.tsx        # ❌ 5s undo notification (Prompt 14)
     hooks/
-      useProjects.ts       # ❌ React Query: GET/POST/DELETE projects
-      useCreateSession.ts  # ❌ POST /projects/{id}/sessions
-      useSessionStatus.ts  # ❌ Polling GET /sessions/{id}/status
-      useSession.ts        # ❌ GET /sessions/{id}
-      useUpdateItem.ts     # ❌ PATCH items
-      useExport.ts         # ❌ Download export file
+      useLogin.ts          # ✅ POST /auth/login mutation
+      useProjects.ts       # ✅ GET/POST/DELETE projects + useProject + useProjectSessions
+      useCreateSession.ts  # ✅ POST /projects/{id}/sessions with FormData
+      useSessionStatus.ts  # ✅ Polling GET /sessions/{id}/status (stops at terminal state)
+      useSession.ts        # ✅ GET /sessions/{id} with ApiSession type
+      useUpdateItem.ts     # ❌ PATCH items (Prompt 14)
+      useExport.ts         # ❌ Download export file (Prompt 15)
     pages/
-      LoginPage.tsx        # ❌
-      ProjectsPage.tsx     # ❌ List + create + delete projects
-      ProjectDetailPage.tsx  # ❌ Session history list
-      NewSessionPage.tsx   # ❌ Text input + file upload + language selector
-      SessionDetailPage.tsx  # ❌ Polling + results + inline edit
+      LoginPage.tsx        # ✅ Login with left branding panel + form
+      ProjectsPage.tsx     # ✅ List + create modal + delete flow
+      ProjectDetailPage.tsx  # ✅ Session history list with status badges
+      NewSessionPage.tsx   # ✅ Text/file tabs, drag-and-drop, config, submit
+      SessionDetailPage.tsx  # ✅ Polling → progress/error/results with tab bar
 ```
 
 ### Data Model
