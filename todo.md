@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–12 ✅ (frontend foundation + projects dashboard + new extraction form done)
+## Progress: 134/134 backend tasks complete + Prompts 10–13 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page done)
 
 ---
 
@@ -383,42 +383,44 @@
 
 ---
 
-## Prompt 13 — Extraction Progress & Results Layout
+## Prompt 13 — Extraction Progress & Results Layout ✅
 
-- [ ] Write `frontend/src/hooks/useSessionStatus.ts`
-  - [ ] Polls every 2s while status is pending|processing
-  - [ ] Stops polling when status is completed|failed
-  - [ ] `enabled` parameter to prevent premature fetching
-- [ ] Write `frontend/src/hooks/useSession.ts`
-  - [ ] Fetches full session, `enabled` parameter
-- [ ] Write `frontend/src/components/ExtractionProgress.tsx`
-  - [ ] Centered spinner
-  - [ ] Status message "Dokument wird analysiert..."
-  - [ ] Pulse animation on text
-- [ ] Write `frontend/src/components/ExtractionError.tsx`
-  - [ ] "Extraktion fehlgeschlagen" heading
-  - [ ] error_message displayed
-  - [ ] "Erneut versuchen" button → navigates back to new session form
-- [ ] Write `frontend/src/pages/SessionDetailPage.tsx` — orchestration
-  - [ ] Polling logic: `useSessionStatus` while not completed/failed
-  - [ ] Switch to `useSession` fetch when status = 'completed'
-  - [ ] Render ExtractionProgress / ExtractionError / SessionResults based on status
-- [ ] Write `frontend/src/components/SessionResults.tsx`
-  - [ ] Header: session title / fallback + export buttons (placeholder)
-  - [ ] Tab bar: "User Stories ({count})" | "NFRs ({count})" | "Offene Fragen ({count})"
-    - [ ] `data-testid="tab-user-stories"`, `data-testid="tab-nfrs"`, `data-testid="tab-questions"`
-  - [ ] Active tab content area
-  - [ ] Footer: "Speichern" button
-- [ ] Write `frontend/src/components/UserStoryCard.tsx` (read-only)
-  - [ ] Title, Als/möchte/damit rows, priority badge, labels
-  - [ ] Source snippet as `<details>` element (collapsed by default)
-  - [ ] `data-testid="user-story-card"`
-- [ ] Write `frontend/src/components/NFRCard.tsx` (read-only)
-  - [ ] Title, category badge (color-coded), metric, description, priority badge
-  - [ ] Source snippet collapsed
-- [ ] Write `frontend/src/components/OpenQuestionCard.tsx` (read-only)
-  - [ ] question_text, owner, status badge (open=yellow, resolved=green)
-  - [ ] Source snippet collapsed
+- [x] Write `frontend/src/hooks/useSessionStatus.ts`
+  - [x] Polls every 2s while status is pending|processing
+  - [x] Stops polling when status is completed|failed (refetchInterval returns false)
+  - [x] `enabled` parameter to prevent premature fetching
+- [x] Write `frontend/src/hooks/useSession.ts`
+  - [x] Fetches full session, `enabled` parameter
+  - [x] `ApiSession` type with `UserStory`/`NFR`/`OpenQuestion` item arrays
+- [x] Write `frontend/src/components/ExtractionProgress.tsx`
+  - [x] Centered teal spinning ring
+  - [x] Status message "Dokument wird analysiert…" with pulse animation
+  - [x] `data-testid="extraction-progress"`
+- [x] Write `frontend/src/components/ExtractionError.tsx`
+  - [x] "Extraktion fehlgeschlagen" heading
+  - [x] error_message displayed
+  - [x] "Erneut versuchen" button → `navigate(-1)`
+  - [x] `data-testid="extraction-error"`
+- [x] Write `frontend/src/pages/SessionDetailPage.tsx` — orchestration
+  - [x] Polling logic: `useSessionStatus` (enabled=true, refetchInterval stops at terminal state)
+  - [x] Switch to `useSession` fetch when status = 'completed'
+  - [x] Project name fetched via `useProject(session.project_id)`
+  - [x] Session title fallback: "Extraktion vom {date}" when title is null
+  - [x] Render ExtractionProgress / ExtractionError / results based on status
+  - [x] `data-testid="session-detail"`
+- [x] `frontend/src/components/SessionHeader.tsx` (already existed) used for tab bar + actions
+  - [x] Tab bar: "User Stories ({count})" | "NFRs ({count})" | "Offene Fragen ({count})"
+  - [x] Export + Speichern buttons in header
+- [x] `frontend/src/components/UserStoryCard.tsx` (already existed, wired to real API data)
+  - [x] Title, Als/möchte/damit rows, priority badge, labels
+  - [x] Source snippet inset block
+- [x] `frontend/src/components/NFRCard.tsx` (already existed, wired to real API data)
+  - [x] Title, category badge (color-coded), metric, description, priority badge
+  - [x] Source snippet inset block
+- [x] `frontend/src/components/OpenQuestionCard.tsx` (already existed, wired to real API data)
+  - [x] question_text, owner, status badge (open=amber, answered=green, deferred=gray)
+  - [x] Source snippet inset block
+- [x] Empty state per tab (icon + German message) when 0 items
 
 ---
 

@@ -1,18 +1,47 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import SessionHeader, { type SessionTab } from '../components/SessionHeader'
 import UserStoryCard from '../components/UserStoryCard'
 import NFRCard from '../components/NFRCard'
 import OpenQuestionCard from '../components/OpenQuestionCard'
-import { MOCK_SESSION } from '../data/mockData'
+import ExtractionProgress from '../components/ExtractionProgress'
+import ExtractionError from '../components/ExtractionError'
+import { useSessionStatus } from '../hooks/useSessionStatus'
+import { useSession } from '../hooks/useSession'
+import { useProject } from '../hooks/useProjects'
 
 const PAGE_SIZE = 10
 
 export default function SessionDetailPage() {
+  const { sessionId } = useParams<{ sessionId: string }>()
   const [activeTab, setActiveTab] = useState<SessionTab>('user-stories')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
-  const session = MOCK_SESSION
+  // Poll status until terminal state
+  const { data: statusData } = useSessionStatus(sessionId!, true)
+  const isCompleted = statusData?.status === 'completed'
+  const isFailed = statusData?.status === 'failed'
 
+  // Fetch full session only once completed
+  const { data: session } = useSession(sessionId!, isCompleted)
+
+  // Fetch project name once we have the session's project_id
+  const { data: project } = useProject(session?.project_id ?? '')
+
+  // ── Loading / error states ───────────────────────────────────────────────
+  if (!statusData || (!isCompleted && !isFailed)) {
+    return <ExtractionProgress />
+  }
+
+  if (isFailed) {
+    return <ExtractionError message={statusData.error_message} />
+  }
+
+  if (!session) {
+    return <ExtractionProgress />
+  }
+
+  // ── Results ──────────────────────────────────────────────────────────────
   const activeStories = session.user_stories.filter((s) => !s.is_deleted)
   const activeNFRs = session.nfrs.filter((n) => !n.is_deleted)
   const activeQuestions = session.open_questions.filter((q) => !q.is_deleted)
@@ -22,6 +51,14 @@ export default function SessionDetailPage() {
     nfrs: activeNFRs.length,
     openQuestions: activeQuestions.length,
   }
+
+  const sessionTitle = session.title
+    ? session.title
+    : `Extraktion vom ${new Date(session.created_at).toLocaleDateString('de-DE', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      })}`
 
   function handleTabChange(tab: SessionTab) {
     setActiveTab(tab)
@@ -38,10 +75,10 @@ export default function SessionDetailPage() {
   const hasMore = visibleCount < totalForTab
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1" data-testid="session-detail">
       <SessionHeader
-        projectName={session.project_name}
-        sessionName={session.session_name}
+        projectName={project?.name ?? ''}
+        sessionName={sessionTitle}
         sessionId={session.id}
         counts={counts}
         activeTab={activeTab}
@@ -105,6 +142,28 @@ export default function SessionDetailPage() {
                 onDelete={(id) => console.log('delete question', id)}
               />
             ))}
+
+          {/* Empty state */}
+          {totalForTab === 0 && (
+            <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+              <span className="material-symbols-outlined text-stone text-[40px]">
+                {activeTab === 'user-stories'
+                  ? 'manage_accounts'
+                  : activeTab === 'nfrs'
+                    ? 'speed'
+                    : 'help_outline'}
+              </span>
+              <p className="text-muted text-sm">
+                Keine{' '}
+                {activeTab === 'user-stories'
+                  ? 'User Stories'
+                  : activeTab === 'nfrs'
+                    ? 'NFRs'
+                    : 'offenen Fragen'}{' '}
+                gefunden.
+              </p>
+            </div>
+          )}
 
           {/* Load more */}
           {hasMore && (
