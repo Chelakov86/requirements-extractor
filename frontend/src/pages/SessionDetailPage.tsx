@@ -714,7 +714,7 @@ export default function SessionDetailPage() {
         saveState={saveState}
         isDirty={isDirty}
         onSave={handleSave}
-        onExport={(format) => console.log('export', format)}
+        items={{ userStories: activeStories, nfrs: activeNFRs, openQuestions: activeQuestions }}
       />
 
       <main className="flex-1 p-6 md:p-10 lg:px-20">

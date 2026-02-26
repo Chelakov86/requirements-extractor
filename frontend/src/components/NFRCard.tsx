@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { NFR } from '../data/mockData'
 import PriorityBadge from './PriorityBadge'
+import { copyToClipboard } from '../lib/clipboard'
 
 const CARD_BORDER: Record<string, string> = {
   critical: 'item-card item-card-critical',
@@ -51,6 +52,20 @@ export interface NFRCardProps {
 export default function NFRCard({ nfr, onUpdate, onDelete }: NFRCardProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<NFR>({ ...nfr })
+  const [copied, setCopied] = useState(false)
+
+  function handleCopy() {
+    const cat = nfr.category
+      ? nfr.category.charAt(0).toUpperCase() + nfr.category.slice(1)
+      : ''
+    const text = nfr.metric
+      ? `**[${cat}]** ${nfr.title}: ${nfr.metric}`
+      : `**[${cat}]** ${nfr.title}`
+    copyToClipboard(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   function handleEditStart() {
     setDraft({ ...nfr })
@@ -176,7 +191,7 @@ export default function NFRCard({ nfr, onUpdate, onDelete }: NFRCardProps) {
   // ── View Mode ────────────────────────────────────────────────────────────
   return (
     <div
-      className={`${CARD_BORDER[nfr.priority]} p-4 flex flex-col gap-3`}
+      className={`group ${CARD_BORDER[nfr.priority]} p-4 flex flex-col gap-3`}
       data-testid="nfr-card"
     >
       {/* Header */}
@@ -191,6 +206,23 @@ export default function NFRCard({ nfr, onUpdate, onDelete }: NFRCardProps) {
           <span className="text-xs text-stone font-mono">ID: {nfr.id.slice(0, 8)}</span>
         </div>
         <div className="flex gap-1 shrink-0">
+          <div className="relative">
+            <button
+              className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+              onClick={handleCopy}
+              aria-label="Kopieren"
+              data-testid="nfr-copy"
+            >
+              <span className="material-symbols-outlined text-[18px]">
+                {copied ? 'check' : 'content_copy'}
+              </span>
+            </button>
+            {copied && (
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate text-white text-xs px-2 py-0.5 rounded whitespace-nowrap pointer-events-none">
+                ✓ Kopiert!
+              </span>
+            )}
+          </div>
           <button
             className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors"
             onClick={handleEditStart}

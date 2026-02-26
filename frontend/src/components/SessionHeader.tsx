@@ -1,4 +1,4 @@
-import ExportMenu from './ExportMenu'
+import ExportMenu, { type ExportItems } from './ExportMenu'
 
 export type SessionTab = 'user-stories' | 'nfrs' | 'open-questions'
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
@@ -13,7 +13,7 @@ export interface SessionHeaderProps {
   readonly saveState?: SaveState
   readonly isDirty?: boolean
   readonly onSave?: () => void
-  readonly onExport?: (format: 'json' | 'markdown') => void
+  readonly items?: ExportItems
 }
 
 export default function SessionHeader({
@@ -26,7 +26,7 @@ export default function SessionHeader({
   saveState = 'idle',
   isDirty = false,
   onSave,
-  onExport,
+  items,
 }: SessionHeaderProps) {
   const isSaving = saveState === 'saving'
   const isSaved = saveState === 'saved'
@@ -46,7 +46,7 @@ export default function SessionHeader({
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <ExportMenu sessionId={sessionId} onExport={onExport} />
+          <ExportMenu sessionId={sessionId} items={items} />
           <button
             className="btn-primary flex items-center gap-2 h-10 px-5 disabled:opacity-60 disabled:cursor-not-allowed"
             onClick={onSave}

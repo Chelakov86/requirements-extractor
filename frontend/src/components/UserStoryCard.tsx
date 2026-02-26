@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { UserStory } from '../data/mockData'
 import PriorityBadge from './PriorityBadge'
+import { copyToClipboard } from '../lib/clipboard'
 
 const CARD_BORDER: Record<string, string> = {
   critical: 'item-card item-card-critical',
@@ -29,7 +30,20 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<UserStory>({ ...story })
   const [labelInput, setLabelInput] = useState('')
+  const [copied, setCopied] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
+
+  function handleCopy() {
+    const lines = [
+      `**Als** ${story.as_who}`,
+      `**möchte ich** ${story.i_want}`,
+    ]
+    if (story.so_that) lines.push(`**damit** ${story.so_that}`)
+    copyToClipboard(lines.join('\n')).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   // Reset draft when entering edit mode
   function handleEditStart() {
@@ -247,7 +261,7 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
   // ── View Mode ────────────────────────────────────────────────────────────
   return (
     <div
-      className={`${CARD_BORDER[story.priority]} p-4 flex flex-col gap-3`}
+      className={`group ${CARD_BORDER[story.priority]} p-4 flex flex-col gap-3`}
       data-testid="user-story-card"
     >
       {/* Header */}
@@ -257,6 +271,23 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
           <span className="text-xs text-stone font-mono">ID: {story.id.slice(0, 8)}</span>
         </div>
         <div className="flex gap-1 shrink-0">
+          <div className="relative">
+            <button
+              className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+              onClick={handleCopy}
+              aria-label="Kopieren"
+              data-testid="user-story-copy"
+            >
+              <span className="material-symbols-outlined text-[18px]">
+                {copied ? 'check' : 'content_copy'}
+              </span>
+            </button>
+            {copied && (
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate text-white text-xs px-2 py-0.5 rounded whitespace-nowrap pointer-events-none">
+                ✓ Kopiert!
+              </span>
+            )}
+          </div>
           <button
             className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors"
             onClick={handleEditStart}

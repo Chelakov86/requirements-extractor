@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 18-prompt implementation plan.
 
-**Status**: Prompts 1–13 complete (backend fully implemented, frontend through session detail). `todo.md` tracks remaining tasks.
+**Status**: Prompts 1–15 complete (backend fully implemented, frontend through export UI). `todo.md` tracks remaining tasks.
 
 ### What's done
 
@@ -25,14 +25,15 @@ An internal web tool for Business Analysts/PMs to extract structured requirement
 | 11 | Projects dashboard (list, create, delete, project detail) | ✅ Complete |
 | 12 | New extraction form (text/file upload, validation, submit) | ✅ Complete |
 | 13 | Session detail page (polling, progress, results layout) | ✅ Complete |
-| 14 | Inline editing, item management, undo toast | ❌ Not started |
-| 15–18 | Export UI, error handling, E2E tests, accessibility, README | ❌ Not started |
+| 14 | Inline editing, item management, undo toast | ✅ Complete |
+| 15 | Export UI (download + clipboard, per-item copy) | ✅ Complete |
+| 16–18 | Error handling, E2E tests, accessibility, README | ❌ Not started |
 
 ## Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS (served via Nginx in Docker)
 - **Backend**: Python 3.12 + FastAPI (async, JWT auth, BackgroundTasks)
-- **AI**: Google Gemini 1.5 Pro (structured JSON output mode)
+- **AI**: Google Gemini 2.0 Flash (structured JSON output mode; model ID: `gemini-2.0-flash`)
 - **Database**: PostgreSQL 16 + SQLAlchemy 2.x + Alembic
 - **File parsing**: PyMuPDF (PDF), python-docx (DOCX), openpyxl (XLSX), python-pptx (PPTX)
 
@@ -65,6 +66,9 @@ docker compose exec backend alembic upgrade head
 
 # Create the first user
 docker compose exec backend python -m scripts.create_user --email admin@example.com --password secret
+
+# Test user (already exists in the running Docker instance)
+# email: test@test.com  password: test123
 ```
 
 ## Architecture
@@ -154,6 +158,7 @@ frontend/
     lib/
       api.ts              # ✅ Axios instance with JWT interceptor + 401 redirect
       format.ts           # ✅ formatBytes utility
+      clipboard.ts        # ✅ copyToClipboard() with navigator.clipboard + execCommand fallback
     context/
       AuthContext.tsx      # ✅ Auth state (token, login, logout) from localStorage
     components/
@@ -166,28 +171,28 @@ frontend/
       ProjectsEmptyState.tsx  # ✅ Empty state for projects list
       PriorityBadge.tsx    # ✅ Priority color badge component
       LanguageSelect.tsx   # ✅ DE/EN language dropdown
-      SessionHeader.tsx    # ✅ Tab bar (User Stories/NFRs/Fragen) + export/save buttons
-      UserStoryCard.tsx    # ✅ Display card (read-only; edit mode in Prompt 14)
-      NFRCard.tsx          # ✅ Display card (read-only; edit mode in Prompt 14)
-      OpenQuestionCard.tsx # ✅ Display card (read-only; edit mode in Prompt 14)
+      SessionHeader.tsx    # ✅ Tab bar + export/save buttons; accepts `items: ExportItems` prop for ExportMenu
+      UserStoryCard.tsx    # ✅ Inline edit mode + hover copy button (group/group-hover pattern)
+      NFRCard.tsx          # ✅ Inline edit mode + hover copy button; normalizes lowercase API categories
+      OpenQuestionCard.tsx # ✅ Inline edit mode + hover copy button
       ExtractionProgress.tsx  # ✅ Polling spinner with status message
       ExtractionError.tsx  # ✅ Error state with retry button
-      ExportMenu.tsx       # ✅ Placeholder (wired in Prompt 15)
-      UndoToast.tsx        # ❌ 5s undo notification (Prompt 14)
+      ExportMenu.tsx       # ✅ Self-contained dropdown; uses useExportSession internally; accepts items: ExportItems for client-side markdown generation
+      UndoToast.tsx        # ✅ 5s undo notification (Prompt 14)
     hooks/
       useLogin.ts          # ✅ POST /auth/login mutation
       useProjects.ts       # ✅ GET/POST/DELETE projects + useProject + useProjectSessions
       useCreateSession.ts  # ✅ POST /projects/{id}/sessions with FormData
       useSessionStatus.ts  # ✅ Polling GET /sessions/{id}/status (stops at terminal state)
       useSession.ts        # ✅ GET /sessions/{id} with ApiSession type
-      useUpdateItem.ts     # ❌ PATCH items (Prompt 14)
-      useExport.ts         # ❌ Download export file (Prompt 15)
+      useUpdateItem.ts     # ✅ PATCH/DELETE/POST items (Prompt 14)
+      useExport.ts         # ✅ Download export file as blob (Prompt 15)
     pages/
       LoginPage.tsx        # ✅ Login with left branding panel + form
       ProjectsPage.tsx     # ✅ List + create modal + delete flow
       ProjectDetailPage.tsx  # ✅ Session history list with status badges
       NewSessionPage.tsx   # ✅ Text/file tabs, drag-and-drop, config, submit
-      SessionDetailPage.tsx  # ✅ Polling → progress/error/results with tab bar
+      SessionDetailPage.tsx  # ✅ Polling → progress/error/results; localItems + serverItemsRef diff-save pattern
 ```
 
 ### Data Model
@@ -306,6 +311,11 @@ When generating new Stitch screens:
 - React Query is the data-fetching layer; no ad-hoc `fetch` calls in components
 - All routes except `/login` are wrapped in `ProtectedRoute`
 - Soft-delete flow: show `UndoToast` for 5s, then call `DELETE`; if undone, call restore endpoint
+- **Local state pattern** (`SessionDetailPage`): `localItems` for UI state + `serverItemsRef` as snapshot; `pickChanged()` diffs them on save and PATCHes only changed fields
+- **Hover-reveal buttons**: add `group` to the card wrapper, `opacity-0 group-hover:opacity-100` on the button
+- **API field name**: backend session response uses `non_functional_requirements` (not `nfrs`) — map accordingly in `useSession.ts`
+- **NFR categories**: API returns lowercase (`performance`, `security`, etc.) — normalize with `capitalize()` for display
+- **ExportMenu**: self-contained, no `onExport` callback — pass `items: ExportItems` from `SessionDetailPage` via `SessionHeader`; the hook `useExportSession` lives inside the component
 
 ## API Endpoints (implemented)
 
@@ -319,12 +329,15 @@ DELETE /api/v1/projects/{id}                               # hard delete → 204
 POST   /api/v1/projects/{id}/sessions                      # 202, starts background extraction
 GET    /api/v1/sessions/{id}/status                        # {status, error_message}
 GET    /api/v1/sessions/{id}                               # full session with all items
-PATCH  /api/v1/sessions/{id}/user-stories/{item_id}
-DELETE /api/v1/sessions/{id}/user-stories/{item_id}
+POST   /api/v1/sessions/{id}/user-stories                   # create → 201
+PATCH  /api/v1/sessions/{id}/user-stories/{item_id}        # update fields → 200
+DELETE /api/v1/sessions/{id}/user-stories/{item_id}        # soft delete → 204
 POST   /api/v1/sessions/{id}/user-stories/{item_id}/restore
+POST   /api/v1/sessions/{id}/nfrs                          # create → 201
 PATCH  /api/v1/sessions/{id}/nfrs/{item_id}
 DELETE /api/v1/sessions/{id}/nfrs/{item_id}
 POST   /api/v1/sessions/{id}/nfrs/{item_id}/restore
+POST   /api/v1/sessions/{id}/questions                     # create → 201
 PATCH  /api/v1/sessions/{id}/questions/{item_id}
 DELETE /api/v1/sessions/{id}/questions/{item_id}
 POST   /api/v1/sessions/{id}/questions/{item_id}/restore

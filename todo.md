@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–14 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing done)
+## Progress: 134/134 backend tasks complete + Prompts 10–15 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI done)
 
 ---
 
@@ -471,26 +471,25 @@
 
 ---
 
-## Prompt 15 — Export UI & Clipboard
+## Prompt 15 — Export UI & Clipboard ✅
 
-- [ ] Write `frontend/src/lib/clipboard.ts`
-  - [ ] `copyToClipboard(text)` — navigator.clipboard with legacy fallback
-- [ ] Write `frontend/src/hooks/useExport.ts`
-  - [ ] `downloadExport(format)` — GET /sessions/{id}/export as blob, trigger download
-- [ ] Write `frontend/src/lib/markdown.ts`
-  - [ ] `generateMarkdownClientSide(session, localItems) -> string` — same format as backend exporter
-- [ ] Write `frontend/src/components/ExportMenu.tsx`
-  - [ ] "Exportieren ▾" dropdown button in SessionResults header
-  - [ ] "📋 Alle kopieren (Markdown)" → copyToClipboard(markdownText)
-  - [ ] "⬇ Markdown herunterladen" → downloadExport('markdown')
-  - [ ] "⬇ JSON herunterladen" → downloadExport('json')
-- [ ] Add per-item copy button to all card components
-  - [ ] Copy icon visible on hover
-  - [ ] "✓ Kopiert!" tooltip for 2 seconds after click
-  - [ ] UserStory format: Als/möchte/damit 3 lines
-  - [ ] NFR format: [category] title: metric
-  - [ ] OpenQuestion format: ❓ question_text
-- [ ] Wire ExportMenu into SessionResults header (replace placeholder)
+- [x] Write `frontend/src/lib/clipboard.ts`
+  - [x] `copyToClipboard(text)` — navigator.clipboard with legacy fallback
+- [x] Write `frontend/src/hooks/useExport.ts`
+  - [x] `downloadExport(format)` — GET /sessions/{id}/export as blob, trigger download
+- [x] `generateMarkdown(items)` — client-side markdown generation inside ExportMenu (inline, no separate file)
+- [x] Write `frontend/src/components/ExportMenu.tsx`
+  - [x] "Exportieren ▾" dropdown button in SessionResults header
+  - [x] "📋 Alle kopieren (Markdown)" → copyToClipboard(markdownText), button shows "Kopiert ✓" for 2s
+  - [x] "⬇ Markdown herunterladen" → downloadExport('markdown')
+  - [x] "⬇ JSON herunterladen" → downloadExport('json')
+- [x] Add per-item copy button to all card components
+  - [x] Copy icon visible on hover (opacity-0 group-hover:opacity-100)
+  - [x] "✓ Kopiert!" tooltip for 2 seconds after click
+  - [x] UserStory format: **Als** / **möchte ich** / **damit**
+  - [x] NFR format: **[category]** title: metric
+  - [x] OpenQuestion format: ❓ question_text
+- [x] Wire ExportMenu into SessionHeader (replaced onExport callback with items prop)
 
 ---
 
