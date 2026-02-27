@@ -4,6 +4,7 @@ import LanguageSelect from '../components/LanguageSelect'
 import { useProject } from '../hooks/useProjects'
 import { useCreateSession } from '../hooks/useCreateSession'
 import { formatBytes } from '../lib/format'
+import { getApiErrorMessage } from '../lib/api'
 import { NEW_SESSION_CONTENT, type OutputLanguage } from '../data/mockData'
 
 const MAX_FILE_BYTES = 30 * 1024 * 1024  // 30 MB
@@ -57,6 +58,24 @@ export default function NewSessionPage() {
     if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files)
   }
 
+  function mapApiError(err: unknown): string {
+    // Try to extract error code from the response
+    const data = (err as { response?: { data?: { error?: string; message?: string; detail?: string } } })
+      ?.response?.data
+    const code = data?.error
+    if (code === 'FILE_TOO_LARGE') {
+      // The backend may include the filename in the message
+      return data?.message ?? `Eine Datei überschreitet die maximale Größe von 30 MB.`
+    }
+    if (code === 'TOTAL_SIZE_EXCEEDED') {
+      return 'Die Gesamtgröße aller Dateien überschreitet 50 MB. Bitte entferne einige Dateien.'
+    }
+    if (code === 'INVALID_FILE_TYPE') {
+      return 'Das Dateiformat wird nicht unterstützt. Erlaubt: PDF, DOCX, XLSX, PPTX, TXT, MD.'
+    }
+    return getApiErrorMessage(err) || 'Fehler beim Erstellen der Anforderungserfassung. Bitte versuche es erneut.'
+  }
+
   async function handleSubmit() {
     setErrorMessage('')
     const formData = new FormData()
@@ -71,9 +90,7 @@ export default function NewSessionPage() {
       const session = await createSession.mutateAsync(formData)
       navigate(`/sessions/${session.id}`)
     } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string } } })
-        ?.response?.data?.detail
-      setErrorMessage(detail ?? 'Fehler beim Erstellen der Session. Bitte versuche es erneut.')
+      setErrorMessage(mapApiError(err))
     }
   }
 

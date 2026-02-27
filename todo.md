@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–15 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI done)
+## Progress: 134/134 backend tasks complete + Prompts 10–16 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI + error handling done)
 
 ---
 
@@ -493,35 +493,35 @@
 
 ---
 
-## Prompt 16 — Error Handling & Empty States
+## Prompt 16 — Error Handling & Empty States ✅
 
-- [ ] Backend: add exception handlers to `backend/app/main.py`
-  - [ ] `RequestValidationError` → 422 with `VALIDATION_ERROR` code
-  - [ ] Generic `Exception` → 500 with `INTERNAL_ERROR`, log the error
-- [ ] Write `frontend/src/lib/api.ts` additions
-  - [ ] `ApiError` interface (error: string, message: string)
-  - [ ] `getApiErrorMessage(err) -> string` utility
-- [ ] Write `frontend/src/components/ErrorBanner.tsx`
-  - [ ] Red banner with message, optional retry button, dismiss ✕ button
-  - [ ] `role="alert"` for accessibility
-- [ ] Apply error handling to all pages
-  - [ ] ProjectsPage: ErrorBanner on load failure with retry; inline error in create modal
-  - [ ] NewSessionPage: map `FILE_TOO_LARGE`, `TOTAL_SIZE_EXCEEDED`, `INVALID_FILE_TYPE` to friendly messages; ErrorBanner on submit failure
-  - [ ] SessionDetailPage: partial warning banner (yellow) when some files failed
-  - [ ] SessionDetailPage: ErrorBanner on save failure
-- [ ] Add empty states to all lists
-  - [ ] Projects list: "Noch keine Projekte. Erstelle dein erstes Projekt." + "+" button
-  - [ ] Sessions list: "Noch keine Extraktionen. Starte eine neue Extraktion." + button
-  - [ ] User Stories tab (0 items): "Keine User Stories extrahiert."
-  - [ ] NFRs tab (0 items): "Keine nicht-funktionalen Anforderungen gefunden."
-  - [ ] Open Questions tab (0 items): "Keine offenen Fragen identifiziert."
-- [ ] Write `frontend/src/components/Skeleton.tsx`
-  - [ ] `<Skeleton className />` — animated pulse box
-  - [ ] `<CardSkeleton />` — card-shaped skeleton
-- [ ] Apply skeletons to loading states
-  - [ ] ProjectsPage: 3 skeleton cards while loading
-  - [ ] ProjectDetailPage: skeleton rows while loading sessions
-  - [ ] SessionDetailPage: skeletons while session loads after polling completes
+- [x] Backend: add exception handlers to `backend/app/main.py`
+  - [x] `RequestValidationError` → 422 with `VALIDATION_ERROR` code
+  - [x] Generic `Exception` → 500 with `INTERNAL_ERROR`, log the error
+- [x] Write `frontend/src/lib/api.ts` additions
+  - [x] `ApiError` interface (error: string, message: string)
+  - [x] `getApiErrorMessage(err) -> string` utility
+- [x] Write `frontend/src/components/ErrorBanner.tsx`
+  - [x] Red banner with message, optional retry button, dismiss ✕ button
+  - [x] `role="alert"` for accessibility
+- [x] Apply error handling to all pages
+  - [x] ProjectsPage: ErrorBanner on load failure with retry; inline error in create modal
+  - [x] NewSessionPage: map `FILE_TOO_LARGE`, `TOTAL_SIZE_EXCEEDED`, `INVALID_FILE_TYPE` to friendly messages; ErrorBanner on submit failure
+  - [ ] SessionDetailPage: partial warning banner (yellow) when some files failed — deferred (no backend support yet)
+  - [x] SessionDetailPage: ErrorBanner on save failure (with retry + dismiss)
+- [x] Add empty states to all lists
+  - [x] Projects list: "Noch keine Projekte. Erstelle dein erstes Projekt." + "+" button
+  - [x] Sessions list: "Noch keine Extraktionen. Starte eine neue Extraktion." + button
+  - [x] User Stories tab (0 items): "Keine User Stories extrahiert."
+  - [x] NFRs tab (0 items): "Keine nicht-funktionalen Anforderungen gefunden."
+  - [x] Open Questions tab (0 items): "Keine offenen Fragen identifiziert."
+- [x] Write `frontend/src/components/Skeleton.tsx`
+  - [x] `<Skeleton className />` — animated pulse box
+  - [x] `<CardSkeleton />` — card-shaped skeleton
+- [x] Apply skeletons to loading states
+  - [x] ProjectsPage: 3 skeleton cards while loading
+  - [x] ProjectDetailPage: skeleton rows while loading sessions
+  - [x] SessionDetailPage: skeletons while session loads after polling completes
 
 ---
 

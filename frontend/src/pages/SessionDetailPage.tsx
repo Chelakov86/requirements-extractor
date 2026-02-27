@@ -7,6 +7,8 @@ import OpenQuestionCard from '../components/OpenQuestionCard'
 import ExtractionProgress from '../components/ExtractionProgress'
 import ExtractionError from '../components/ExtractionError'
 import UndoToast from '../components/UndoToast'
+import ErrorBanner from '../components/ErrorBanner'
+import { CardSkeleton } from '../components/Skeleton'
 import { useSessionStatus } from '../hooks/useSessionStatus'
 import { useSession } from '../hooks/useSession'
 import { useProject } from '../hooks/useProjects'
@@ -664,7 +666,26 @@ export default function SessionDetailPage() {
   }
 
   if (!session || !localItems) {
-    return <ExtractionProgress />
+    // Extraction is done but session data is still loading — show skeletons
+    return (
+      <div className="flex flex-col flex-1" data-testid="session-loading">
+        {/* Placeholder header */}
+        <div className="bg-white border-b border-border px-6 py-4 animate-pulse">
+          <div className="max-w-[1200px] mx-auto flex flex-col gap-2">
+            <div className="h-3 bg-stone/15 rounded w-32" />
+            <div className="h-6 bg-stone/20 rounded w-64" />
+          </div>
+        </div>
+        <main className="flex-1 p-6 md:p-10 lg:px-20">
+          <div className="max-w-[1100px] mx-auto flex flex-col gap-3">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
+        </main>
+      </div>
+    )
   }
 
   // ── Results ──────────────────────────────────────────────────────────────
@@ -722,17 +743,11 @@ export default function SessionDetailPage() {
 
           {/* Save error banner */}
           {saveError && (
-            <div className="flex items-center gap-3 px-4 py-3 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
-              <span className="material-symbols-outlined text-[18px]">error</span>
-              <span className="flex-1">{saveError}</span>
-              <button
-                onClick={() => setSaveError(null)}
-                className="text-red-500 hover:text-red-700"
-                aria-label="Schließen"
-              >
-                <span className="material-symbols-outlined text-[16px]">close</span>
-              </button>
-            </div>
+            <ErrorBanner
+              message={saveError}
+              onRetry={() => void handleSave()}
+              onDismiss={() => setSaveError(null)}
+            />
           )}
 
           {/* Toolbar */}
@@ -769,7 +784,7 @@ export default function SessionDetailPage() {
               ))}
 
               {totalForTab === 0 && (
-                <EmptyState icon="manage_accounts" label="User Stories" />
+                <EmptyState icon="manage_accounts" message="Keine User Stories extrahiert." />
               )}
 
               {hasMore && <LoadMoreButton onClick={() => setVisibleCount((c) => c + PAGE_SIZE)} />}
@@ -803,7 +818,9 @@ export default function SessionDetailPage() {
                 />
               ))}
 
-              {totalForTab === 0 && <EmptyState icon="speed" label="NFRs" />}
+              {totalForTab === 0 && (
+                <EmptyState icon="speed" message="Keine nicht-funktionalen Anforderungen gefunden." />
+              )}
 
               {hasMore && <LoadMoreButton onClick={() => setVisibleCount((c) => c + PAGE_SIZE)} />}
 
@@ -835,7 +852,9 @@ export default function SessionDetailPage() {
                 />
               ))}
 
-              {totalForTab === 0 && <EmptyState icon="help_outline" label="offenen Fragen" />}
+              {totalForTab === 0 && (
+                <EmptyState icon="help_outline" message="Keine offenen Fragen identifiziert." />
+              )}
 
               {hasMore && <LoadMoreButton onClick={() => setVisibleCount((c) => c + PAGE_SIZE)} />}
 
@@ -872,11 +891,11 @@ export default function SessionDetailPage() {
 
 // ── Small helpers ─────────────────────────────────────────────────────────
 
-function EmptyState({ icon, label }: { icon: string; label: string }) {
+function EmptyState({ icon, message }: { icon: string; message: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
       <span className="material-symbols-outlined text-stone text-[40px]">{icon}</span>
-      <p className="text-muted text-sm">Keine {label} gefunden.</p>
+      <p className="text-muted text-sm">{message}</p>
     </div>
   )
 }

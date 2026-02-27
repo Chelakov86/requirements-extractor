@@ -6,6 +6,8 @@ import {
   useDeleteProject,
   type Project,
 } from '../hooks/useProjects'
+import ErrorBanner from '../components/ErrorBanner'
+import { getApiErrorMessage } from '../lib/api'
 
 // ─── Skeleton card ──────────────────────────────────────────────────────────
 
@@ -139,6 +141,7 @@ function CreateProjectModal({
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [nameError, setNameError] = useState('')
+  const [createError, setCreateError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -146,7 +149,12 @@ function CreateProjectModal({
       setNameError('Projektname ist erforderlich')
       return
     }
-    await onCreate(name.trim(), description.trim())
+    setCreateError(null)
+    try {
+      await onCreate(name.trim(), description.trim())
+    } catch (err) {
+      setCreateError(getApiErrorMessage(err))
+    }
   }
 
   return (
@@ -174,6 +182,9 @@ function CreateProjectModal({
 
           {/* Form */}
           <form onSubmit={(e) => void handleSubmit(e)} className="p-6 flex flex-col gap-4">
+            {createError && (
+              <ErrorBanner message={createError} onDismiss={() => setCreateError(null)} />
+            )}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-semibold text-slate" htmlFor="project-name">
                 Projektname <span className="text-priority-critical">*</span>
@@ -274,7 +285,7 @@ function EmptyState({ onCreateClick }: { onCreateClick: () => void }) {
 
 export default function ProjectsPage() {
   const [showModal, setShowModal] = useState(false)
-  const { data: projects = [], isLoading } = useProjects()
+  const { data: projects = [], isLoading, isError, refetch } = useProjects()
   const createProject = useCreateProject()
   const deleteProject = useDeleteProject()
 
@@ -304,14 +315,20 @@ export default function ProjectsPage() {
 
       {/* Main content */}
       <main className="flex-1 px-6 py-10" style={{ backgroundColor: 'var(--color-canvas)' }}>
-        <div className="max-w-[1200px] mx-auto w-full">
+        <div className="max-w-[1200px] mx-auto w-full flex flex-col gap-6">
+          {isError && (
+            <ErrorBanner
+              message="Projekte konnten nicht geladen werden."
+              onRetry={() => void refetch()}
+            />
+          )}
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <SkeletonCard />
               <SkeletonCard />
               <SkeletonCard />
             </div>
-          ) : projects.length === 0 ? (
+          ) : isError ? null : projects.length === 0 ? (
             <EmptyState onCreateClick={() => setShowModal(true)} />
           ) : (
             <div
