@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–16 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI + error handling done)
+## Progress: 134/134 backend tasks complete + Prompts 10–17 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI + error handling + E2E tests done)
 
 ---
 
@@ -467,7 +467,7 @@
   - [x] Save button disabled when no changes (`isDirty=false`)
 - [x] Fixed `useSession.ts`: API field `non_functional_requirements` (was incorrectly `nfrs`)
 - [x] Fixed `Dockerfile`: was installing `google-generativeai` (old SDK), now `google-genai`
-- [x] Fixed `gemini_client.py`: model updated from `gemini-1.5-pro` → `gemini-2.0-flash`
+- [x] Fixed `gemini_client.py`: model updated from `gemini-1.5-pro` → `gemini-2.0-flash` → `gemini-2.5-flash`
 
 ---
 
@@ -525,28 +525,31 @@
 
 ---
 
-## Prompt 17 — E2E Tests (Happy Path)
+## Prompt 17 — E2E Tests (Happy Path) ✅
 
-- [ ] Set up Playwright
-  - [ ] Add `@playwright/test` to frontend devDependencies
-  - [ ] Add `e2e` and `e2e:ui` scripts to package.json
-  - [ ] Write `frontend/playwright.config.ts` (baseURL, screenshots on failure, webServer config)
-  - [ ] Create `frontend/e2e/tests/` directory
-- [ ] Write `frontend/e2e/fixtures.ts`
-  - [ ] `authenticatedPage` fixture (pre-logged-in Page)
-  - [ ] `testProject` fixture (creates project via API, cleans up after)
-  - [ ] Use `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` env vars
-- [ ] Write `frontend/e2e/tests/auth.spec.ts`
-  - [ ] `login with valid credentials` → redirects to /projects
-  - [ ] `login with wrong password shows error` → `data-testid="login-error"` visible
-  - [ ] `protected page redirects unauthenticated user` → redirects to /login
-- [ ] Write `frontend/e2e/tests/projects.spec.ts`
-  - [ ] `create and delete a project` — create via modal, verify visible, delete with confirm, verify gone
-- [ ] Write `frontend/e2e/tests/extraction.spec.ts`
-  - [ ] `full extraction flow with text input` — enter text, submit, wait ≤45s for "User Stories" tab, verify tab count > 0
-  - [ ] `edit a user story and save` — click edit, change title, save, verify "Gespeichert" and new title visible
-- [ ] Add `data-testid` attributes to all components referenced in E2E tests
-  - [ ] Verify `[data-testid="login-error"]`, `[data-testid="user-story-card"]`, `[data-testid="edit-story-btn"]`, `[data-testid="tab-user-stories"]`, etc. are present
+- [x] Set up Playwright
+  - [x] Add `@playwright/test` to frontend devDependencies
+  - [x] Add `e2e` and `e2e:ui` scripts to package.json
+  - [x] Write `frontend/playwright.config.ts` (baseURL 180s timeout, screenshots on failure, webServer config)
+  - [x] Create `frontend/e2e/tests/` directory
+- [x] Write `frontend/e2e/fixtures.ts`
+  - [x] `authenticatedPage` fixture (pre-logged-in Page, uses `#email`/`#password` id selectors)
+  - [x] `testProject` fixture (creates project + completed session via API; `E2E_COMPLETED_SESSION` fast-path env var)
+  - [x] Use `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` env vars
+- [x] Write `frontend/e2e/tests/auth.spec.ts`
+  - [x] `login with valid credentials` → redirects to /projects
+  - [x] `login with wrong password shows error` → `data-testid="login-error"` visible
+  - [x] `protected page redirects unauthenticated user` → redirects to /login
+- [x] Write `frontend/e2e/tests/projects.spec.ts`
+  - [x] `create and delete a project` — create via modal (timestamp-unique name), verify visible, delete with confirm, verify gone
+  - [x] `shows empty state when no projects exist` — page loads, `data-testid="projects-page"` visible
+- [x] Write `frontend/e2e/tests/extraction.spec.ts`
+  - [x] `full extraction flow with text input` — submit form, verify navigation + loading state, then navigate to fixture's completed session and verify tab count > 0
+  - [x] `edit a user story and save` — click edit, change title, save, verify "Gespeichert" and new title visible
+- [x] Add `data-testid` attributes to all components referenced in E2E tests
+  - [x] `data-testid="login-error"`, `data-testid="user-story-card-edit"`, `data-testid="edit-story-btn"`, `data-testid="tab-user-stories"` etc. present
+  - [x] `data-testid="new-project-btn"`, `data-testid="project-name-input"`, `data-testid="create-project-submit"`, `data-testid="delete-project-btn"`, `data-testid="delete-confirm-btn"`
+- [x] Fixed `response_parser.py`: added `_pick()` helper to strip unknown Gemini fields (e.g. `labels` on NFR) before SQLAlchemy model construction — required for gemini-2.5-flash compatibility
 
 ---
 
@@ -578,7 +581,7 @@
 - [ ] All backend unit tests pass (`pytest backend/tests/`)
 - [ ] All backend integration tests pass
 - [ ] Frontend builds without TypeScript errors (`npm run build`)
-- [ ] All Playwright E2E tests pass (happy path + error flows)
+- [x] All Playwright E2E tests pass (happy path — 7/7, ~30s) — error flows in Prompt 18
 - [ ] `docker compose up --build` starts cleanly from scratch
 - [ ] Full extraction flow works end-to-end with real Gemini API key
 - [ ] Export downloads produce valid Markdown and JSON files

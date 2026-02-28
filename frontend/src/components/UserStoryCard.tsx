@@ -133,6 +133,7 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
             onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
             className="text-sm px-3 py-2 rounded border border-border"
             placeholder="Titel der User Story"
+            data-testid="story-title-input"
           />
         </div>
 
@@ -292,6 +293,7 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
             className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors"
             onClick={handleEditStart}
             aria-label="Bearbeiten"
+            data-testid="edit-story-btn"
           >
             <span className="material-symbols-outlined text-[18px]">edit</span>
           </button>

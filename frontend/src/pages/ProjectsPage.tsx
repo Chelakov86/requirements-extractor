@@ -191,6 +191,7 @@ function CreateProjectModal({
               </label>
               <input
                 id="project-name"
+                name="projectName"
                 type="text"
                 value={name}
                 onChange={(e) => {

@@ -43,6 +43,16 @@ def parse_gemini_response(response_text: str) -> dict:
     return parsed
 
 
+_USER_STORY_FIELDS = {"title", "as_who", "i_want", "so_that", "acceptance_criteria", "priority", "labels", "source_snippet"}
+_NFR_FIELDS = {"title", "category", "description", "metric", "priority", "source_snippet"}
+_OPEN_QUESTION_FIELDS = {"question_text", "owner", "status", "source_snippet"}
+
+
+def _pick(d: dict, allowed: set) -> dict:
+    """Return only the keys from d that are in allowed (drops unknown Gemini fields)."""
+    return {k: v for k, v in d.items() if k in allowed}
+
+
 def map_to_db_models(parsed: dict, session_id: str) -> dict:
     """
     Convert a parsed Gemini response dict into lists of SQLAlchemy model instances.
@@ -53,15 +63,15 @@ def map_to_db_models(parsed: dict, session_id: str) -> dict:
     session_uuid = uuid.UUID(session_id) if isinstance(session_id, str) else session_id
 
     user_stories = [
-        UserStory(session_id=session_uuid, sort_order=i, **story)
+        UserStory(session_id=session_uuid, sort_order=i, **_pick(story, _USER_STORY_FIELDS))
         for i, story in enumerate(parsed.get("user_stories", []))
     ]
     nfrs = [
-        NonFunctionalRequirement(session_id=session_uuid, sort_order=i, **nfr)
+        NonFunctionalRequirement(session_id=session_uuid, sort_order=i, **_pick(nfr, _NFR_FIELDS))
         for i, nfr in enumerate(parsed.get("non_functional_requirements", []))
     ]
     questions = [
-        OpenQuestion(session_id=session_uuid, sort_order=i, **q)
+        OpenQuestion(session_id=session_uuid, sort_order=i, **_pick(q, _OPEN_QUESTION_FIELDS))
         for i, q in enumerate(parsed.get("open_questions", []))
     ]
 

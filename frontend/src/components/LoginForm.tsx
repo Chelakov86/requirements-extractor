@@ -53,6 +53,7 @@ export default function LoginForm({
             </span>
             <input
               id="email"
+              name="email"
               type="email"
               autoComplete="email"
               required
@@ -89,6 +90,7 @@ export default function LoginForm({
             </span>
             <input
               id="password"
+              name="password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               required

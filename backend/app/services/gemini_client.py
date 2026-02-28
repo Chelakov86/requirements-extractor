@@ -22,7 +22,7 @@ class GeminiClient:
         prompt = build_extraction_prompt(text, output_language)
         try:
             response = await self._client.aio.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=prompt,
                 config={"response_mime_type": "application/json"},
             )

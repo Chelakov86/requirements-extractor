@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 18-prompt implementation plan.
 
-**Status**: Prompts 1–16 complete (backend fully implemented, frontend through error handling). `todo.md` tracks remaining tasks.
+**Status**: Prompts 1–17 complete (backend fully implemented, frontend through E2E tests). `todo.md` tracks remaining tasks.
 
 ### What's done
 
@@ -28,13 +28,14 @@ An internal web tool for Business Analysts/PMs to extract structured requirement
 | 14 | Inline editing, item management, undo toast | ✅ Complete |
 | 15 | Export UI (download + clipboard, per-item copy) | ✅ Complete |
 | 16 | Error handling, empty states, loading skeletons | ✅ Complete |
-| 17–18 | E2E tests, accessibility, README | ❌ Not started |
+| 17 | E2E tests (happy path) — 7/7 passing | ✅ Complete |
+| 18 | Accessibility, error-flow E2E tests, README | ❌ Not started |
 
 ## Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS (served via Nginx in Docker)
 - **Backend**: Python 3.12 + FastAPI (async, JWT auth, BackgroundTasks)
-- **AI**: Google Gemini 2.0 Flash (structured JSON output mode; model ID: `gemini-2.0-flash`)
+- **AI**: Google Gemini 2.5 Flash (structured JSON output mode; model ID: `gemini-2.5-flash`)
 - **Database**: PostgreSQL 16 + SQLAlchemy 2.x + Alembic
 - **File parsing**: PyMuPDF (PDF), python-docx (DOCX), openpyxl (XLSX), python-pptx (PPTX)
 

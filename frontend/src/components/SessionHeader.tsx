@@ -80,18 +80,21 @@ export default function SessionHeader({
         <button
           className={`tab ${activeTab === 'user-stories' ? 'tab-active' : ''}`}
           onClick={() => onTabChange('user-stories')}
+          data-testid="tab-user-stories"
         >
           User Stories ({counts.userStories})
         </button>
         <button
           className={`tab ${activeTab === 'nfrs' ? 'tab-active' : ''}`}
           onClick={() => onTabChange('nfrs')}
+          data-testid="tab-nfrs"
         >
           NFRs ({counts.nfrs})
         </button>
         <button
           className={`tab ${activeTab === 'open-questions' ? 'tab-active' : ''}`}
           onClick={() => onTabChange('open-questions')}
+          data-testid="tab-open-questions"
         >
           Offene Fragen ({counts.openQuestions})
         </button>
