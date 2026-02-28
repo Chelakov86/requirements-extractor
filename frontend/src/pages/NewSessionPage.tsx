@@ -246,6 +246,7 @@ export default function NewSessionPage() {
                     multiple
                     accept=".pdf,.docx,.xlsx,.pptx,.txt,.md"
                     className="hidden"
+                    data-testid="file-input"
                     onChange={(e) => {
                       if (e.target.files) addFiles(e.target.files)
                       e.target.value = ''
@@ -298,7 +299,7 @@ export default function NewSessionPage() {
                               }}
                             >
                               {formatBytes(f.size)}
-                              {isOversized && ' — zu groß (max. 30 MB)'}
+                              {isOversized && ' — überschreitet das Maximum (30 MB)'}
                             </span>
                           </div>
                           <button

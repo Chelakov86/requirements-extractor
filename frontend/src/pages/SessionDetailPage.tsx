@@ -101,48 +101,56 @@ function AddUserStoryForm({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-xs font-semibold text-muted">Titel *</label>
+        <label className="text-xs font-semibold text-muted" htmlFor="new-story-title">Titel *</label>
         <input
+          id="new-story-title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="text-sm px-3 py-2 rounded border border-border"
           placeholder="Titel der User Story"
           required
+          data-testid="new-story-title"
         />
       </div>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-semibold text-muted">Als (Rolle) *</label>
+          <label className="text-xs font-semibold text-muted" htmlFor="new-story-as-who">Als (Rolle) *</label>
           <input
+            id="new-story-as-who"
             type="text"
             value={asWho}
             onChange={(e) => setAsWho(e.target.value)}
             className="text-sm px-3 py-2 rounded border border-border"
             placeholder="Rolle"
             required
+            data-testid="new-story-as-who"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-semibold text-muted">möchte ich, dass … *</label>
+          <label className="text-xs font-semibold text-muted" htmlFor="new-story-i-want">möchte ich, dass … *</label>
           <input
+            id="new-story-i-want"
             type="text"
             value={iWant}
             onChange={(e) => setIWant(e.target.value)}
             className="text-sm px-3 py-2 rounded border border-border"
             placeholder="Ziel"
             required
+            data-testid="new-story-i-want"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-semibold text-muted">damit …</label>
+          <label className="text-xs font-semibold text-muted" htmlFor="new-story-so-that">damit …</label>
           <input
+            id="new-story-so-that"
             type="text"
             value={soThat}
             onChange={(e) => setSoThat(e.target.value)}
             className="text-sm px-3 py-2 rounded border border-border"
             placeholder="Nutzen"
+            data-testid="new-story-so-that"
           />
         </div>
       </div>

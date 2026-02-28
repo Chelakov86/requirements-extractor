@@ -169,6 +169,7 @@ export default function OpenQuestionCard({ question, onUpdate, onDelete }: OpenQ
             className="p-1 text-stone hover:text-primary rounded hover:bg-gray-50 transition-colors"
             onClick={handleEditStart}
             aria-label="Bearbeiten"
+            data-testid="edit-question-btn"
           >
             <span className="material-symbols-outlined text-[18px]">edit</span>
           </button>
@@ -176,6 +177,7 @@ export default function OpenQuestionCard({ question, onUpdate, onDelete }: OpenQ
             className="p-1 text-stone hover:text-red-600 rounded hover:bg-red-50 transition-colors"
             onClick={() => onDelete?.(question.id)}
             aria-label="Löschen"
+            data-testid="delete-question-btn"
           >
             <span className="material-symbols-outlined text-[18px]">delete</span>
           </button>

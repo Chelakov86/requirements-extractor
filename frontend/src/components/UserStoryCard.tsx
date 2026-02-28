@@ -301,6 +301,7 @@ export default function UserStoryCard({ story, onUpdate, onDelete }: UserStoryCa
             className="p-1 text-stone hover:text-red-600 rounded hover:bg-red-50 transition-colors"
             onClick={() => onDelete?.(story.id)}
             aria-label="Löschen"
+            data-testid="delete-story-btn"
           >
             <span className="material-symbols-outlined text-[18px]">delete</span>
           </button>

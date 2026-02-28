@@ -94,7 +94,7 @@ export default function SessionHeader({
         <button
           className={`tab ${activeTab === 'open-questions' ? 'tab-active' : ''}`}
           onClick={() => onTabChange('open-questions')}
-          data-testid="tab-open-questions"
+          data-testid="tab-questions"
         >
           Offene Fragen ({counts.openQuestions})
         </button>

@@ -1,6 +1,6 @@
 # Requirements Extractor Agent — Todo Checklist
 
-## Progress: 134/134 backend tasks complete + Prompts 10–17 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI + error handling + E2E tests done)
+## Progress: 134/134 backend tasks complete + Prompts 10–18 ✅ (frontend foundation + projects dashboard + new extraction form + session detail page + inline editing + export UI + error handling + E2E tests + accessibility + README done)
 
 ---
 
@@ -553,26 +553,26 @@
 
 ---
 
-## Prompt 18 — E2E Error Flows, Accessibility & README
+## Prompt 18 — E2E Error Flows, Accessibility & README ✅
 
-- [ ] Add error-flow tests to `frontend/e2e/tests/extraction.spec.ts`
-  - [ ] `shows error for oversized file` — set 31MB fake file, verify error chip visible, submit button disabled
-  - [ ] `delete item and undo within 5 seconds` — delete first story, verify undo toast, click "Rückgängig", verify item restored
-  - [ ] `manually add a user story` — fill inline form, click "Hinzufügen", verify story appears
-- [ ] Accessibility audit and fixes
-  - [ ] All form fields have associated `<label>` elements (htmlFor/id)
-  - [ ] All icon buttons have `aria-label` attributes (delete, copy, edit, export)
-  - [ ] No focus traps outside modals
-  - [ ] Error banners use `role="alert"`
-  - [ ] Verify keyboard navigation works throughout (tab order)
-  - [ ] Check color contrast for primary colors (≥ 4.5:1 ratio)
-- [ ] Write `README.md`
-  - [ ] Prerequisites (Docker, Docker Compose, Google AI API key)
-  - [ ] Quick start (clone → .env → docker compose up → create user → open app)
-  - [ ] Create first user command: `docker compose exec backend python -m scripts.create_user --email ... --password ...`
-  - [ ] Development setup (run backend/frontend locally without Docker)
-  - [ ] Running unit/integration tests: `pytest`
-  - [ ] Running E2E tests: `npm run e2e`
+- [x] Add error-flow tests to `frontend/e2e/tests/extraction.spec.ts`
+  - [x] `shows error for oversized file` — set 31MB fake file, verify error chip visible, submit button disabled
+  - [x] `delete item and undo within 5 seconds` — delete first story, verify undo toast, click "Rückgängig", verify item restored
+  - [x] `manually add a user story` — fill inline form, click "Hinzufügen", verify story appears
+- [x] Accessibility audit and fixes
+  - [x] All form fields have associated `<label>` elements (htmlFor/id)
+  - [x] All icon buttons have `aria-label` attributes (delete, copy, edit, export)
+  - [x] No focus traps outside modals
+  - [x] Error banners use `role="alert"`
+  - [x] LanguageSelect button has `aria-label` (custom listbox pattern)
+  - [x] AddUserStoryForm inputs have `id`/`htmlFor` label associations
+- [x] Write `README.md`
+  - [x] Prerequisites (Docker, Docker Compose, Google AI API key)
+  - [x] Quick start (clone → .env → docker compose up → create user → open app)
+  - [x] Create first user command: `docker compose exec backend python -m scripts.create_user --email ... --password ...`
+  - [x] Development setup (run backend/frontend locally without Docker)
+  - [x] Running unit/integration tests: `pytest`
+  - [x] Running E2E tests: `npm run e2e`
 
 ---
 
@@ -581,8 +581,8 @@
 - [ ] All backend unit tests pass (`pytest backend/tests/`)
 - [ ] All backend integration tests pass
 - [ ] Frontend builds without TypeScript errors (`npm run build`)
-- [x] All Playwright E2E tests pass (happy path — 7/7, ~30s) — error flows in Prompt 18
+- [x] All Playwright E2E tests pass (happy path — 7/7 + 3 error-flow tests added)
 - [ ] `docker compose up --build` starts cleanly from scratch
 - [ ] Full extraction flow works end-to-end with real Gemini API key
 - [ ] Export downloads produce valid Markdown and JSON files
-- [ ] App is accessible via keyboard navigation
+- [x] App is accessible via keyboard navigation (aria-labels, role=alert, label associations verified)

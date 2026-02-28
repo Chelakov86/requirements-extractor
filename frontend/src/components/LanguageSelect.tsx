@@ -34,6 +34,7 @@ export default function LanguageSelect({ value, onChange }: LanguageSelectProps)
         className="w-full h-11 px-3 text-left bg-white border border-border rounded text-slate text-sm flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-label={`Ausgabesprache: ${selected.label}`}
       >
         <span className="flex items-center gap-2">
           <span className="text-lg leading-none">{selected.flag}</span>

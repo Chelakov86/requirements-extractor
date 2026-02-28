@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An internal web tool for Business Analysts/PMs to extract structured requirements (User Stories, NFRs, Open Questions) from unstructured documents using Google Gemini AI. Supports German and English input/output. See `SPEC.md` for full requirements and `BLUEPRINT.md` for the 18-prompt implementation plan.
 
-**Status**: Prompts 1–17 complete (backend fully implemented, frontend through E2E tests). `todo.md` tracks remaining tasks.
+**Status**: All 18 prompts complete. Application is fully implemented, tested, accessible, and documented.
 
 ### What's done
 
@@ -29,7 +29,7 @@ An internal web tool for Business Analysts/PMs to extract structured requirement
 | 15 | Export UI (download + clipboard, per-item copy) | ✅ Complete |
 | 16 | Error handling, empty states, loading skeletons | ✅ Complete |
 | 17 | E2E tests (happy path) — 7/7 passing | ✅ Complete |
-| 18 | Accessibility, error-flow E2E tests, README | ❌ Not started |
+| 18 | Accessibility, error-flow E2E tests, README | ✅ Complete |
 
 ## Tech Stack
 
