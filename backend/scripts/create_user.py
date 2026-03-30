@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.auth.utils import hash_password
 from app.config import settings
-from app.models import User
+from app.models import Base, User
 
 
 def main() -> None:
@@ -16,7 +16,10 @@ def main() -> None:
     parser.add_argument("--password", required=True, help="User password")
     args = parser.parse_args()
 
-    engine = create_engine(settings.DATABASE_URL)
+    _connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+    engine = create_engine(settings.DATABASE_URL, connect_args=_connect_args)
+    if settings.DATABASE_URL.startswith("sqlite"):
+        Base.metadata.create_all(bind=engine)
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
 

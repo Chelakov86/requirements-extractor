@@ -2,8 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, func
-from sqlalchemy.dialects.postgresql import ARRAY, UUID
+from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, Uuid, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -14,7 +13,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
@@ -25,8 +24,8 @@ class User(Base):
 class Project(Base):
     __tablename__ = "projects"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
@@ -39,8 +38,8 @@ class Project(Base):
 class ExtractionSession(Base):
     __tablename__ = "extraction_sessions"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    project_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    project_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     title: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     output_language: Mapped[str] = mapped_column(String(2), server_default="de", nullable=False)
     status: Mapped[str] = mapped_column(String(20), server_default="pending", nullable=False)
@@ -57,8 +56,8 @@ class ExtractionSession(Base):
 class SourceDocument(Base):
     __tablename__ = "source_documents"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
     filename: Mapped[str] = mapped_column(String(255), nullable=False)
     file_type: Mapped[str] = mapped_column(String(10), nullable=False)
     raw_text: Mapped[str] = mapped_column(Text, nullable=False)
@@ -70,15 +69,15 @@ class SourceDocument(Base):
 class UserStory(Base):
     __tablename__ = "user_stories"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     as_who: Mapped[str] = mapped_column(Text, nullable=False)
     i_want: Mapped[str] = mapped_column(Text, nullable=False)
     so_that: Mapped[str] = mapped_column(Text, nullable=False)
-    acceptance_criteria: Mapped[Optional[list[str]]] = mapped_column(ARRAY(Text()), nullable=True)
+    acceptance_criteria: Mapped[Optional[list[str]]] = mapped_column(JSON, nullable=True)
     priority: Mapped[str] = mapped_column(String(10), server_default="medium", nullable=False)
-    labels: Mapped[Optional[list[str]]] = mapped_column(ARRAY(Text()), nullable=True)
+    labels: Mapped[Optional[list[str]]] = mapped_column(JSON, nullable=True)
     source_snippet: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_deleted: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     sort_order: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
@@ -91,8 +90,8 @@ class UserStory(Base):
 class NonFunctionalRequirement(Base):
     __tablename__ = "non_functional_requirements"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
@@ -110,8 +109,8 @@ class NonFunctionalRequirement(Base):
 class OpenQuestion(Base):
     __tablename__ = "open_questions"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("extraction_sessions.id", ondelete="CASCADE"), nullable=False)
     question_text: Mapped[str] = mapped_column(Text, nullable=False)
     owner: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     status: Mapped[str] = mapped_column(String(20), server_default="open", nullable=False)

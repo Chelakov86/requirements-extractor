@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -6,10 +7,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api import router
+from app.config import settings
+from app.database import engine
+from app.models import Base
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Requirements Extractor API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if settings.DATABASE_URL.startswith("sqlite"):
+        Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(title="Requirements Extractor API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
