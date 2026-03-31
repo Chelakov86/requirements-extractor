@@ -52,7 +52,29 @@ Then open **http://localhost:3000** and log in.
 
 ## Development Setup (without Docker)
 
-### Backend
+> **SQLite is used by default** — no database setup or PostgreSQL needed for local development.
+
+### One-command start
+
+```bash
+# Install dependencies first (once)
+cd backend && pip install -e ".[dev]" && cd ..
+cd frontend && npm install && cd ..
+
+# Start backend + frontend together
+./dev.sh
+```
+
+| Service  | URL                      |
+|----------|--------------------------|
+| Frontend | http://localhost:3000     |
+| Backend  | http://localhost:8000     |
+
+Press `Ctrl+C` to stop both services.
+
+### Manual start (step by step)
+
+**Backend:**
 
 ```bash
 cd backend
@@ -60,19 +82,15 @@ cd backend
 # Install dependencies (requires Python 3.12+)
 pip install -e ".[dev]"
 
-# Set environment variables (or export them)
-export DATABASE_URL=postgresql://reqext:reqext@localhost:5432/reqext
+# Optional: set env vars (SQLite is used if DATABASE_URL is not set)
 export SECRET_KEY=dev-secret-key
 export GEMINI_API_KEY=<your-key>
-
-# Apply database migrations
-alembic upgrade head
 
 # Start the dev server with hot-reload
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Frontend
+**Frontend:**
 
 ```bash
 cd frontend
@@ -84,7 +102,7 @@ npm install
 npm run dev
 ```
 
-The frontend dev server runs at **http://localhost:5173** and proxies all `/api` calls to the backend.
+The frontend dev server runs at **http://localhost:3000** and proxies all `/api` calls to the backend.
 
 ---
 
@@ -137,7 +155,7 @@ The `E2E_COMPLETED_SESSION` variable is useful in CI or when the Gemini API is u
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `DATABASE_URL` | Yes | — | PostgreSQL connection string |
+| `DATABASE_URL` | No | SQLite (`reqext.db`) | PostgreSQL connection string (local dev uses SQLite automatically) |
 | `SECRET_KEY` | Yes | — | JWT signing secret (min. 32 chars) |
 | `GEMINI_API_KEY` | Yes | — | Google AI Studio API key |
 | `JWT_ALGORITHM` | No | `HS256` | JWT algorithm |
