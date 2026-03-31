@@ -27,3 +27,10 @@ postgres_data/
 
 # Playwright MCP
 .playwright-mcp/
+
+# SQLite databases
+*.db
+*.db_test
+
+# Test results
+test-results/
